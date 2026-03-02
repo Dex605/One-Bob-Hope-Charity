@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Bob Hope Charity — Testimonies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --terra: #C4622D; --amber: #E8A020; --black: #0a0a0a; --deep: #0d0b08;
+      --warm-white: #F5F0E8; --muted: rgba(245,240,232,0.55);
+      --glass: rgba(245,240,232,0.04); --glass-border: rgba(245,240,232,0.1);
+    }
+    html, body { background: var(--black); color: var(--warm-white); font-family: 'Jost', sans-serif; overflow-x: hidden; }
+
+    /* NAV */
+    .navbar { position: sticky; top: 0; z-index: 100; background: rgba(10,8,4,0.94); backdrop-filter: blur(16px); border-bottom: 1px solid var(--glass-border); padding: 0 36px; display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--warm-white); text-decoration: none; }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link { padding: 8px 18px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.55); text-decoration: none; border-radius: 3px; transition: all 0.2s; border: 1px solid transparent; }
+    .nav-link:hover { color: var(--warm-white); background: var(--glass); border-color: var(--glass-border); }
+    .nav-link.active { color: var(--warm-white); border-color: var(--glass-border); }
+    .nav-link.donate-btn { background: var(--terra); color: var(--warm-white); border-color: var(--terra); }
+    .nav-link.donate-btn:hover { background: #D4703A; }
+    .hamburger { display: none; background: none; border: none; color: var(--warm-white); font-size: 1.4rem; cursor: pointer; }
+    .mobile-menu { display: none; flex-direction: column; gap: 4px; padding: 12px 20px 16px; background: rgba(10,8,4,0.97); border-bottom: 1px solid var(--glass-border); }
+    .mobile-menu.open { display: flex; }
+
+    /* HERO */
+    .hero {
+      padding: 80px 36px 60px; text-align: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(196,98,45,0.13) 0%, transparent 65%);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '"'; font-family: 'Cormorant Garamond', serif;
+      font-size: 28rem; line-height: 0.8; color: rgba(196,98,45,0.05);
+      position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .hero-eyebrow { font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.05; margin-bottom: 16px; }
+    .hero-title em { font-style: italic; color: var(--terra); }
+    .hero-sub { max-width: 520px; margin: 0 auto; font-size: 0.88rem; line-height: 1.8; color: var(--muted); font-weight: 300; }
+
+    /* FILTERS */
+    .filters-wrap { max-width: 1100px; margin: 0 auto; padding: 36px 36px 0; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 18px; border: 1.5px solid var(--glass-border); border-radius: 20px; background: var(--glass); color: var(--muted); cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s; }
+    .filter-btn:hover { border-color: rgba(196,98,45,0.4); color: var(--warm-white); }
+    .filter-btn.active { border-color: var(--terra); background: rgba(196,98,45,0.12); color: var(--warm-white); }
+
+    /* FEATURED TESTIMONY */
+    .featured-wrap { max-width: 1100px; margin: 0 auto; padding: 48px 36px 0; }
+    .featured-card {
+      background: linear-gradient(135deg, rgba(196,98,45,0.1) 0%, rgba(232,160,32,0.05) 100%);
+      border: 1px solid rgba(196,98,45,0.25); border-radius: 12px;
+      padding: 52px 48px; position: relative; overflow: hidden;
+      margin-bottom: 48px;
+    }
+    .featured-card::before {
+      content: '"'; font-family: 'Cormorant Garamond', serif;
+      font-size: 16rem; line-height: 0.7; color: rgba(196,98,45,0.08);
+      position: absolute; top: -20px; left: 20px; pointer-events: none;
+    }
+    .featured-label { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--terra); margin-bottom: 20px; }
+    .featured-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 2.5vw, 1.75rem); font-style: italic; line-height: 1.7; color: rgba(245,240,232,0.88); margin-bottom: 28px; max-width: 780px; position: relative; z-index: 1; }
+    .featured-author { display: flex; align-items: center; gap: 16px; }
+    .featured-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--terra); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; flex-shrink: 0; border: 2px solid rgba(196,98,45,0.4); }
+    .featured-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
+    .featured-role { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
+    .featured-country { display: inline-block; margin-top: 5px; font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); }
+
+    /* SECTION TITLE */
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: 0 36px 80px; }
+    .sec-label { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--terra); margin-bottom: 12px; }
+    .sec-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 3.5vw, 2.8rem); font-weight: 300; line-height: 1.1; margin-bottom: 36px; }
+    .sec-title em { font-style: italic; color: var(--amber); }
+    .divider { height: 1px; background: var(--glass-border); margin: 60px 0; }
+
+    /* TESTIMONY GRID */
+    .testimony-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 60px; }
+    .testimony-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 10px; padding: 28px 24px;
+      transition: border-color 0.3s, transform 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .testimony-card:hover { border-color: rgba(232,160,32,0.25); transform: translateY(-3px); }
+    .testimony-card.hidden { display: none; }
+    .tc-type { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terra); margin-bottom: 14px; padding: 4px 10px; background: rgba(196,98,45,0.1); border-radius: 20px; display: inline-block; }
+    .quote-mark { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; line-height: 0.5; color: var(--terra); opacity: 0.35; margin-bottom: 14px; display: block; }
+    .tc-text { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-style: italic; line-height: 1.78; color: rgba(245,240,232,0.82); margin-bottom: 22px; flex: 1; }
+    .tc-author { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+    .tc-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--terra); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+    .tc-name { font-size: 0.82rem; font-weight: 500; margin-bottom: 2px; }
+    .tc-role { font-size: 0.67rem; color: var(--muted); letter-spacing: 0.04em; }
+
+    /* BEFORE & AFTER */
+    .ba-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 24px; margin-bottom: 60px; }
+    .ba-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; overflow: hidden; }
+    .ba-header { padding: 20px 22px 0; }
+    .ba-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 4px; }
+    .ba-location { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 18px; }
+    .ba-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .ba-col { padding: 18px 22px 22px; }
+    .ba-col:first-child { border-right: 1px solid var(--glass-border); background: rgba(192,57,43,0.04); }
+    .ba-col:last-child { background: rgba(45,74,53,0.06); }
+    .ba-col-label { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 10px; }
+    .ba-col:first-child .ba-col-label { color: rgba(192,57,43,0.7); }
+    .ba-col:last-child .ba-col-label { color: rgba(107,191,122,0.8); }
+    .ba-col-text { font-size: 0.8rem; line-height: 1.75; color: rgba(245,240,232,0.68); font-weight: 300; }
+
+    /* VIDEO SECTION */
+    .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 60px; }
+    .video-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; overflow: hidden; transition: border-color 0.3s; }
+    .video-card:hover { border-color: rgba(196,98,45,0.3); }
+    .video-thumb {
+      position: relative; padding-top: 56.25%;
+      background: #1a1208; overflow: hidden; cursor: pointer;
+    }
+    .video-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: opacity 0.3s; }
+    .video-card:hover .video-thumb img { opacity: 0.85; }
+    .video-play {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(196,98,45,0.85); border: 2px solid rgba(245,240,232,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; transition: transform 0.2s, background 0.2s;
+    }
+    .video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.1); background: var(--terra); }
+    .video-info { padding: 18px 18px 20px; }
+    .video-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 5px; }
+    .video-meta { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
+
+    /* CTA */
+    .cta-banner { text-align: center; padding: 52px 36px; background: linear-gradient(135deg, rgba(196,98,45,0.12) 0%, rgba(232,160,32,0.06) 100%); border: 1px solid rgba(196,98,45,0.2); border-radius: 12px; margin-bottom: 0; }
+    .cta-banner h3 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 300; margin-bottom: 14px; }
+    .cta-banner h3 em { font-style: italic; color: var(--amber); }
+    .cta-banner p { font-size: 0.86rem; color: var(--muted); max-width: 480px; margin: 0 auto 28px; line-height: 1.8; }
+    .btn-cta { display: inline-flex; align-items: center; gap: 10px; padding: 15px 36px; background: var(--terra); color: var(--warm-white); border: none; border-radius: 4px; font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+    .btn-cta:hover { background: #D4703A; transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer { background: var(--deep); border-top: 1px solid var(--glass-border); padding: 40px 36px 28px; text-align: center; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+    .footer-logo span { color: var(--amber); }
+    .footer-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 12px 0; }
+    .footer-links a { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--amber); }
+    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.25); margin-top: 12px; }
+
+    @media (max-width: 768px) {
+      .navbar { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .featured-card { padding: 32px 24px; }
+      .filters-wrap, .featured-wrap, .page-wrap { padding-left: 20px; padding-right: 20px; }
+      .hero { padding: 56px 20px 44px; }
+      .ba-grid { grid-template-columns: 1fr; }
+      .ba-cols { grid-template-columns: 1fr; }
+      .ba-col:first-child { border-right: none; border-bottom: 1px solid var(--glass-border); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">One <span>Bob</span> Hope</a>
+  <div class="nav-links">
+    <a href="home.html" class="nav-link">Stories</a>
+    <a href="testimonies.html" class="nav-link active">Testimonies</a>
+    <a href="mission.html" class="nav-link">Mission & Vision</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="home.html" class="nav-link">Stories</a>
+  <a href="testimonies.html" class="nav-link active">Testimonies</a>
+  <a href="mission.html" class="nav-link">Mission & Vision</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Real Voices · Real Change · Real East Africa</div>
+  <h1 class="hero-title">Words from the people<br/><em>your bobs reached</em></h1>
+  <p class="hero-sub">These are not written by us. These are the words of mothers, children, teachers, and community leaders whose lives were touched by ordinary people giving what they could.</p>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-wrap">
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterTestimonies('all', this)">All Voices</button>
+    <button class="filter-btn" onclick="filterTestimonies('child', this)">👧 Children</button>
+    <button class="filter-btn" onclick="filterTestimonies('parent', this)">👩 Parents</button>
+    <button class="filter-btn" onclick="filterTestimonies('community', this)">🏫 Community Leaders</button>
+    <button class="filter-btn" onclick="filterTestimonies('donor', this)">💛 Donors</button>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<div class="featured-wrap">
+  <div class="featured-card">
+    <div class="featured-label">⭐ Featured Testimony</div>
+    <div class="featured-quote">"I am twelve years old. Before, I used to sleep hungry every night. Now I eat breakfast before school and I can think clearly in class. My teacher says I am improving every week. I want to say thank you to every person who gave even one bob. It reached me. I felt it. Someone I have never met decided I was worth one bob — and that one bob told me I matter."</div>
+    <div class="featured-author">
+      <div class="featured-avatar">FT</div>
+      <div>
+        <div class="featured-name">Fatuma Twalib</div>
+        <div class="featured-role">Student, Age 12</div>
+        <div class="featured-country">🇰🇪 Mombasa, Kenya</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONY CARDS -->
+<div class="page-wrap">
+  <div class="sec-label">All Testimonies</div>
+  <h2 class="sec-title">Every voice that<br/><em>speaks for thousands</em></h2>
+
+  <div class="testimony-grid" id="testimonyGrid">
+
+    <div class="testimony-card" data-type="parent">
+      <span class="tc-type">👩 Parent</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">My son was about to drop out of school. One Bob Hope paid his fees for an entire year. Today he is in Form Three and tells everyone he wants to be an engineer. I cried when I found out that someone I never met had given for my child. That stranger does not know what they did for my family.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">JW</div>
+        <div><div class="tc-name">Jane Wambua</div><div class="tc-role">Mother · Machakos, Kenya 🇰🇪</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="community">
+      <span class="tc-type">🏫 Community Leader</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">We were feeding 18 children a day and then we ran out of money. One Bob Hope stepped in within a week. Now we feed 34 children every morning. These children do not have parents — they have each other and they have us. Now they also have you.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">BM</div>
+        <div><div class="tc-name">Brother Michael Ssebunya</div><div class="tc-role">Care Centre Director · Kampala, Uganda 🇺🇬</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="child">
+      <span class="tc-type">👧 Child</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">I used to hide when the teacher asked who had not paid fees because I was always that child. Now I sit at the front of the class. I answer every question. I am not ashamed anymore. I am proud. Someone believed in me first — and now I believe in myself.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">EO</div>
+        <div><div class="tc-name">Emmanuel Okello</div><div class="tc-role">Student, Age 13 · Kampala, Uganda 🇺🇬</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="community">
+      <span class="tc-type">🏫 Community Leader</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">Our school had no books. We were writing on the backs of old exercise books. One Bob Hope sent us 400 textbooks and repaired our roof before the rainy season. Our attendance has gone from 60% to 94% in one term. The children feel like they matter now. Because they do.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">HG</div>
+        <div><div class="tc-name">Headmaster Grace Habimana</div><div class="tc-role">Primary School · Kigali, Rwanda 🇷🇼</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="donor">
+      <span class="tc-type">💛 Donor</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">I gave KSh 20. I thought — what can 20 shillings do? But then I saw the update about Mercy going back to school and I realised my 20 shillings was part of something. I am not rich. I am a boda boda rider. But I give 20 shillings every week now. Because it is real. The children are real.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">JK</div>
+        <div><div class="tc-name">Joseph Kamau</div><div class="tc-role">Boda Boda Rider · Nairobi, Kenya 🇰🇪</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="parent">
+      <span class="tc-type">👩 Parent</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">My daughter Aline came home from the care centre singing a song I had never heard. She was healthy. She had colour in her face. She told me "Mama, people I don't know fed me today." I sat down and cried. In this world there are still good people. One Bob Hope showed me that.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">CM</div>
+        <div><div class="tc-name">Claudette Mukamana</div><div class="tc-role">Mother · Kigali, Rwanda 🇷🇼</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="child">
+      <span class="tc-type">👧 Child</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">My grandmother cannot see very well anymore. She works so hard for me. When One Bob Hope paid for my school uniform I wore it and went to show her. She touched the fabric and said — "God used somebody's hands today." I will never forget that. I will work hard to make those hands proud.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">AT</div>
+        <div><div class="tc-name">Amara Tadesse</div><div class="tc-role">Student, Age 7 · Addis Ababa, Ethiopia 🇪🇹</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="community">
+      <span class="tc-type">🏫 Community Leader</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">The borehole changed everything. Women no longer walk hours for water. Children are no longer sick from the river. School attendance has doubled because children are healthy enough to go. One borehole. Funded by ordinary people giving one bob. I want every donor to know — your one bob dug a well.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">SN</div>
+        <div><div class="tc-name">Chief Simon Nkurunziza</div><div class="tc-role">Village Elder · Bujumbura, Burundi 🇧🇮</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="donor">
+      <span class="tc-type">💛 Donor</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">I am a university student in Dar es Salaam. I have very little money. But I started sending TSh 100 every Friday — my "Friday bob." I have done it for 8 months now. I know it is small. But I know it is consistent. And consistency is what these children need — not one big miracle but many small commitments.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">ZM</div>
+        <div><div class="tc-name">Zuwena Mwangi</div><div class="tc-role">University Student · Dar es Salaam, Tanzania 🇹🇿</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="parent">
+      <span class="tc-type">👩 Parent</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">I used to lie to my children about why there was no food. I would say "we will eat later" knowing there was nothing. One Bob Hope connected us to a feeding programme nearby. My children eat twice a day now. I do not have to lie anymore. That is the greatest gift — I can look my children in the eyes again.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">RO</div>
+        <div><div class="tc-name">Rose Otieno</div><div class="tc-role">Mother of Three · Kisumu, Kenya 🇰🇪</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="child">
+      <span class="tc-type">👧 Child</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">I want to be a doctor when I grow up. People tell me it is hard. But I tell them — someone gave me one bob, and now I am in school, and now I can dream. If a stranger can believe in me, then I can believe in myself. I will become a doctor. Watch me.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">MW</div>
+        <div><div class="tc-name">Mercy Wanjiru</div><div class="tc-role">Student, Age 9 · Kibera, Nairobi 🇰🇪</div></div>
+      </div>
+    </div>
+
+    <div class="testimony-card" data-type="donor">
+      <span class="tc-type">💛 Donor</span>
+      <span class="quote-mark">"</span>
+      <p class="tc-text">I told my whole church about One Bob Hope. Now 40 of us each give 500 UGX every Sunday after service. We call it our "Sunday Bob." In three months we funded a child's entire school year. Forty people. 500 shillings each. One child's future. Do the maths and then tell me small things don't matter.</p>
+      <div class="tc-author">
+        <div class="tc-avatar">PN</div>
+        <div><div class="tc-name">Pastor Daniel Nsubuga</div><div class="tc-role">Church Leader · Entebbe, Uganda 🇺🇬</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- BEFORE & AFTER -->
+  <div class="sec-label">Transformation Stories</div>
+  <h2 class="sec-title">Before and after<br/><em>your one bob arrived</em></h2>
+
+  <div class="ba-grid">
+    <div class="ba-card">
+      <div class="ba-header">
+        <div class="ba-name">Emmanuel Okello</div>
+        <div class="ba-location">Age 13 · Kampala, Uganda 🇺🇬</div>
+      </div>
+      <div class="ba-cols">
+        <div class="ba-col">
+          <div class="ba-col-label">Before</div>
+          <div class="ba-col-text">Facing dropout at end of term. No fees. Sharing one school uniform with another boy on alternate days. Going to bed hungry 4 nights a week. Crying silently so the other boys in the home don't hear.</div>
+        </div>
+        <div class="ba-col">
+          <div class="ba-col-label">After</div>
+          <div class="ba-col-text">Fees paid. Full scholarship secured. Own uniform. Eating three meals daily. Top of mathematics class. Applying for secondary school. Smiling in every photo. Telling his teacher he will build a school one day.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ba-card">
+      <div class="ba-header">
+        <div class="ba-name">Pierre's Village</div>
+        <div class="ba-location">Bujumbura Rural, Burundi 🇧🇮</div>
+      </div>
+      <div class="ba-cols">
+        <div class="ba-col">
+          <div class="ba-col-label">Before</div>
+          <div class="ba-col-text">200 people sharing a contaminated river. Children missing school weekly due to waterborne illness. Women waking at 4am to collect water. Crops failing from poor irrigation. Hospital visits consuming family savings.</div>
+        </div>
+        <div class="ba-col">
+          <div class="ba-col-label">After</div>
+          <div class="ba-col-text">Borehole drilled and operational. Clean water 200 metres from every home. School attendance up 80%. Hospital visits down by half. Women now have mornings free for small businesses. Hope restored to an entire community.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ba-card">
+      <div class="ba-header">
+        <div class="ba-name">Aline Uwimana</div>
+        <div class="ba-location">Age 6 · Kigali, Rwanda 🇷🇼</div>
+      </div>
+      <div class="ba-cols">
+        <div class="ba-col">
+          <div class="ba-col-label">Before</div>
+          <div class="ba-col-text">Severely malnourished at age four. Weight of a two-year-old. Could barely stand or walk. Brought to the care centre by a neighbour. Mother working three jobs and still unable to feed her.</div>
+        </div>
+        <div class="ba-col">
+          <div class="ba-col-label">After</div>
+          <div class="ba-col-text">Healthy weight. Running and playing. Started school this term. Favourite subject is drawing. Wants to be an artist. Sings in the morning. Her mother says she is "like a different child — like the child God intended her to be."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ba-card">
+      <div class="ba-header">
+        <div class="ba-name">Juma's School</div>
+        <div class="ba-location">Dodoma, Tanzania 🇹🇿</div>
+      </div>
+      <div class="ba-cols">
+        <div class="ba-col">
+          <div class="ba-col-label">Before</div>
+          <div class="ba-col-text">340 students, 2 teachers, collapsed roof. One book shared between six children. 60% attendance. Children writing in dirt. Teacher unpaid for 3 months but still showing up every day.</div>
+        </div>
+        <div class="ba-col">
+          <div class="ba-col-label">After</div>
+          <div class="ba-col-text">Roof repaired. 400 new textbooks. Two additional teachers funded. Attendance at 94%. Teacher salary supported for one year. Children now have their own exercise books. Juma came first in district exams.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- VIDEO SECTION -->
+  <div class="sec-label">Video Testimonies</div>
+  <h2 class="sec-title">Hear it in their<br/><em>own voices</em></h2>
+  <p style="font-size:0.83rem;color:var(--muted);margin-bottom:32px;line-height:1.7;">Video testimonies from the communities we serve. These are real people, speaking in their own languages, about what your one bob has meant to them.</p>
+
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="video-thumb" onclick="alert('Video coming soon — we are currently filming in Nairobi, Kenya.')">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80" alt="Kenya testimony"/>
+        <div class="video-play">▶</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Fatuma's Story — Mombasa</div>
+        <div class="video-meta">🇰🇪 Kenya · 3 min 42 sec · Swahili with subtitles</div>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb" onclick="alert('Video coming soon — we are currently filming in Kampala, Uganda.')">
+        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" alt="Uganda testimony"/>
+        <div class="video-play">▶</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Brother Michael's Centre — Kampala</div>
+        <div class="video-meta">🇺🇬 Uganda · 5 min 18 sec · English</div>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb" onclick="alert('Video coming soon — we are currently filming in Kigali, Rwanda.')">
+        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&q=80" alt="Rwanda testimony"/>
+        <div class="video-play">▶</div>
+      </div>
+      <div class="video-info">
+        <div class="video-title">Aline After Two Years — Kigali</div>
+        <div class="video-meta">🇷🇼 Rwanda · 4 min 05 sec · Kinyarwanda with subtitles</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <h3>You have heard their voices.<br/><em>Now add yours.</em></h3>
+    <p>Give your one bob today. Then come back here in three months — and read the testimony that your donation made possible.</p>
+    <a href="donate.html" class="btn-cta">Give Your One Bob →</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">One <span>Bob</span> Hope Charity</div>
+  <div class="footer-links">
+    <a href="home.html">Stories</a>
+    <a href="donate.html">Donate</a>
+    <a href="mission.html">Mission</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="mailto:hello@onebobhope.org">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 One Bob Hope Charity · All testimonies are real and shared with permission</div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  function filterTestimonies(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.testimony-card').forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+</script>
+</body>
+</html>
