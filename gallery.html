@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Bob Hope Charity — Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --terra: #C4622D; --amber: #E8A020; --black: #0a0a0a; --deep: #0d0b08;
+      --warm-white: #F5F0E8; --muted: rgba(245,240,232,0.55);
+      --glass: rgba(245,240,232,0.04); --glass-border: rgba(245,240,232,0.1);
+    }
+    html, body { background: var(--black); color: var(--warm-white); font-family: 'Jost', sans-serif; overflow-x: hidden; }
+
+    /* NAV */
+    .navbar { position: sticky; top: 0; z-index: 100; background: rgba(10,8,4,0.94); backdrop-filter: blur(16px); border-bottom: 1px solid var(--glass-border); padding: 0 36px; display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--warm-white); text-decoration: none; }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link { padding: 8px 18px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.55); text-decoration: none; border-radius: 3px; transition: all 0.2s; border: 1px solid transparent; }
+    .nav-link:hover { color: var(--warm-white); background: var(--glass); border-color: var(--glass-border); }
+    .nav-link.active { color: var(--warm-white); border-color: var(--glass-border); }
+    .nav-link.donate-btn { background: var(--terra); color: var(--warm-white); border-color: var(--terra); }
+    .nav-link.donate-btn:hover { background: #D4703A; }
+    .hamburger { display: none; background: none; border: none; color: var(--warm-white); font-size: 1.4rem; cursor: pointer; }
+    .mobile-menu { display: none; flex-direction: column; gap: 4px; padding: 12px 20px 16px; background: rgba(10,8,4,0.97); border-bottom: 1px solid var(--glass-border); }
+    .mobile-menu.open { display: flex; }
+
+    /* HERO */
+    .hero { padding: 72px 36px 52px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(196,98,45,0.12) 0%, transparent 65%); }
+    .hero-eyebrow { font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.05; margin-bottom: 16px; }
+    .hero-title em { font-style: italic; color: var(--terra); }
+    .hero-sub { max-width: 520px; margin: 0 auto; font-size: 0.88rem; line-height: 1.8; color: var(--muted); font-weight: 300; }
+
+    /* FILTERS */
+    .filters-wrap { max-width: 1200px; margin: 0 auto; padding: 32px 36px 0; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 8px 18px; border: 1.5px solid var(--glass-border);
+      border-radius: 20px; background: var(--glass);
+      color: var(--muted); cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 0.72rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: rgba(196,98,45,0.4); color: var(--warm-white); }
+    .filter-btn.active { border-color: var(--terra); background: rgba(196,98,45,0.12); color: var(--warm-white); }
+
+    /* GALLERY GRID */
+    .gallery-wrap { max-width: 1200px; margin: 0 auto; padding: 32px 36px 80px; }
+    .gallery-grid {
+      columns: 3; column-gap: 16px;
+    }
+    .gallery-item {
+      break-inside: avoid; margin-bottom: 16px;
+      position: relative; overflow: hidden;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid var(--glass-border);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .gallery-item:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.5); }
+    .gallery-item img {
+      width: 100%; display: block;
+      filter: brightness(0.85) saturate(0.88);
+      transition: filter 0.4s, transform 0.5s;
+    }
+    .gallery-item:hover img { filter: brightness(0.7) saturate(1); transform: scale(1.04); }
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,8,4,0.92) 0%, rgba(10,8,4,0.2) 50%, transparent 100%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 18px;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-country { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 4px; }
+    .gallery-caption { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; line-height: 1.3; margin-bottom: 8px; }
+    .gallery-view { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.55); }
+    .gallery-tag {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(10,8,4,0.75); backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border);
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 0.62rem; letter-spacing: 0.08em;
+    }
+
+    /* HIDDEN for filter */
+    .gallery-item.hidden { display: none; }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(5,4,2,0.96); backdrop-filter: blur(16px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .lightbox.open { display: flex; }
+    .lb-inner {
+      display: grid; grid-template-columns: 1fr 380px;
+      gap: 0; max-width: 1000px; width: 100%;
+      background: #111; border: 1px solid var(--glass-border);
+      border-radius: 12px; overflow: hidden;
+      max-height: 90vh;
+    }
+    .lb-img-wrap { position: relative; overflow: hidden; }
+    .lb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lb-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(10,8,4,0.7); border: 1px solid var(--glass-border);
+      color: var(--warm-white); font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; z-index: 10;
+    }
+    .lb-close:hover { background: rgba(196,98,45,0.6); }
+    .lb-info { padding: 36px 28px; overflow-y: auto; display: flex; flex-direction: column; }
+    .lb-country { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+    .lb-name { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; line-height: 1.1; margin-bottom: 6px; }
+    .lb-age { font-size: 0.75rem; color: var(--muted); margin-bottom: 20px; letter-spacing: 0.06em; }
+    .lb-story { font-size: 0.83rem; line-height: 1.85; color: rgba(245,240,232,0.72); font-weight: 300; flex: 1; margin-bottom: 24px; }
+    .lb-donate {
+      display: block; width: 100%; padding: 13px;
+      background: var(--terra); color: var(--warm-white);
+      border: none; border-radius: 4px; text-align: center;
+      font-family: 'Jost', sans-serif; font-size: 0.78rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lb-donate:hover { background: #D4703A; }
+    .lb-nav { display: flex; gap: 8px; margin-top: 12px; }
+    .lb-nav-btn {
+      flex: 1; padding: 10px; background: var(--glass);
+      border: 1px solid var(--glass-border); border-radius: 4px;
+      color: var(--muted); cursor: pointer; font-family: 'Jost', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .lb-nav-btn:hover { color: var(--warm-white); border-color: rgba(245,240,232,0.3); }
+
+    /* FOOTER */
+    footer { background: var(--deep); border-top: 1px solid var(--glass-border); padding: 40px 36px 28px; text-align: center; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+    .footer-logo span { color: var(--amber); }
+    .footer-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 12px 0; }
+    .footer-links a { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--amber); }
+    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.25); margin-top: 12px; }
+
+    @media (max-width: 900px) {
+      .gallery-grid { columns: 2; }
+      .lb-inner { grid-template-columns: 1fr; max-height: 95vh; }
+      .lb-img-wrap { max-height: 300px; }
+    }
+    @media (max-width: 600px) {
+      .gallery-grid { columns: 1; }
+      .navbar { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .filters-wrap, .gallery-wrap { padding-left: 20px; padding-right: 20px; }
+      .hero { padding: 52px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">One <span>Bob</span> Hope</a>
+  <div class="nav-links">
+    <a href="home.html" class="nav-link">Stories</a>
+    <a href="home.html#testimonies" class="nav-link">Testimonies</a>
+    <a href="mission.html" class="nav-link">Mission & Vision</a>
+    <a href="gallery.html" class="nav-link active">Gallery</a>
+    <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="home.html" class="nav-link">Stories</a>
+  <a href="home.html#testimonies" class="nav-link">Testimonies</a>
+  <a href="mission.html" class="nav-link">Mission & Vision</a>
+  <a href="gallery.html" class="nav-link active">Gallery</a>
+  <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Real Faces · Real Stories · Real Need</div>
+  <h1 class="hero-title">The faces behind<br/><em>every donation</em></h1>
+  <p class="hero-sub">These are not statistics. These are children. Every photo tells a story of resilience, hope, and a future that is still possible — with your one bob.</p>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-wrap">
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterGallery('all', this)">🌍 All</button>
+    <button class="filter-btn" onclick="filterGallery('kenya', this)">🇰🇪 Kenya</button>
+    <button class="filter-btn" onclick="filterGallery('tanzania', this)">🇹🇿 Tanzania</button>
+    <button class="filter-btn" onclick="filterGallery('uganda', this)">🇺🇬 Uganda</button>
+    <button class="filter-btn" onclick="filterGallery('rwanda', this)">🇷🇼 Rwanda</button>
+    <button class="filter-btn" onclick="filterGallery('burundi', this)">🇧🇮 Burundi</button>
+    <button class="filter-btn" onclick="filterGallery('ethiopia', this)">🇪🇹 Ethiopia</button>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery-wrap">
+  <div class="gallery-grid" id="galleryGrid">
+
+    <div class="gallery-item" data-country="kenya" data-index="0" onclick="openLightbox(0)">
+      <span class="gallery-tag">🇰🇪 Kenya</span>
+      <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80" alt="Children in Kenya"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇰🇪 Kibera, Nairobi</div>
+        <div class="gallery-caption">Morning walk to school</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="ethiopia" data-index="1" onclick="openLightbox(1)">
+      <span class="gallery-tag">🇪🇹 Ethiopia</span>
+      <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&q=80" alt="Child in Ethiopia"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇪🇹 Addis Ababa</div>
+        <div class="gallery-caption">Brightness despite darkness</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-index="2" onclick="openLightbox(2)">
+      <span class="gallery-tag">🇺🇬 Uganda</span>
+      <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" alt="Children Uganda"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇺🇬 Kampala</div>
+        <div class="gallery-caption">A classroom without books</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-index="3" onclick="openLightbox(3)">
+      <span class="gallery-tag">🇹🇿 Tanzania</span>
+      <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80" alt="Tanzania child"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇹🇿 Dar es Salaam</div>
+        <div class="gallery-caption">She smiles every single day</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="rwanda" data-index="4" onclick="openLightbox(4)">
+      <span class="gallery-tag">🇷🇼 Rwanda</span>
+      <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&q=80" alt="Rwanda children"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇷🇼 Kigali</div>
+        <div class="gallery-caption">The care centre that saved her</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-index="5" onclick="openLightbox(5)">
+      <span class="gallery-tag">🇰🇪 Kenya</span>
+      <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&q=80" alt="Kenya school" style="object-position: bottom;"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇰🇪 Mombasa</div>
+        <div class="gallery-caption">First day back after fees paid</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="burundi" data-index="6" onclick="openLightbox(6)">
+      <span class="gallery-tag">🇧🇮 Burundi</span>
+      <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&q=80" alt="Burundi" style="object-position: center 30%;"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇧🇮 Bujumbura</div>
+        <div class="gallery-caption">Six kilometres for clean water</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="ethiopia" data-index="7" onclick="openLightbox(7)">
+      <span class="gallery-tag">🇪🇹 Ethiopia</span>
+      <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" alt="Ethiopia school"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇪🇹 Gondar</div>
+        <div class="gallery-caption">Learning under an open sky</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="uganda" data-index="8" onclick="openLightbox(8)">
+      <span class="gallery-tag">🇺🇬 Uganda</span>
+      <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80" alt="Uganda children home" style="object-position: top;"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇺🇬 Entebbe</div>
+        <div class="gallery-caption">Children's home, 34 smiles</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="tanzania" data-index="9" onclick="openLightbox(9)">
+      <span class="gallery-tag">🇹🇿 Tanzania</span>
+      <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80" alt="Tanzania school" style="object-position: top;"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇹🇿 Dodoma</div>
+        <div class="gallery-caption">A school with no roof</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="rwanda" data-index="10" onclick="openLightbox(10)">
+      <span class="gallery-tag">🇷🇼 Rwanda</span>
+      <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&q=80" alt="Rwanda community" style="object-position: bottom;"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇷🇼 Musanze</div>
+        <div class="gallery-caption">Community meal, every morning</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-country="kenya" data-index="11" onclick="openLightbox(11)">
+      <span class="gallery-tag">🇰🇪 Kenya</span>
+      <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&q=80" alt="Kenya village children" style="object-position: top;"/>
+      <div class="gallery-overlay">
+        <div class="gallery-country">🇰🇪 Kisumu</div>
+        <div class="gallery-caption">Village children, big dreams</div>
+        <div class="gallery-view">Click to read story →</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <div class="lb-inner">
+    <div class="lb-img-wrap">
+      <button class="lb-close" onclick="closeLightbox()">✕</button>
+      <img src="" alt="" class="lb-img" id="lbImg"/>
+    </div>
+    <div class="lb-info">
+      <div class="lb-country" id="lbCountry"></div>
+      <div class="lb-name" id="lbName"></div>
+      <div class="lb-age" id="lbAge"></div>
+      <div class="lb-story" id="lbStory"></div>
+      <a href="donate.html" class="lb-donate">Help This Child — Donate Now →</a>
+      <div class="lb-nav">
+        <button class="lb-nav-btn" onclick="lbNav(-1)">← Previous</button>
+        <button class="lb-nav-btn" onclick="lbNav(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">One <span>Bob</span> Hope Charity</div>
+  <div class="footer-links">
+    <a href="home.html">Stories</a>
+    <a href="donate.html">Donate</a>
+    <a href="mission.html">Mission</a>
+    <a href="testimonies.html">Testimonies</a>
+    <a href="mailto:hello@onebobhope.org">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 One Bob Hope Charity · Photos used with permission or from open license sources</div>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  // Gallery data
+  const PHOTOS = [
+    { img: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=900&q=80', country: '🇰🇪 Kibera, Nairobi — Kenya', name: 'Mercy Wanjiru', age: 'Age 9 · Care Centre Child', story: 'Mercy walks 4 kilometres to school every morning before sunrise, carrying a torn bag held together with string. Her mother sells vegetables at the roadside market, earning barely enough for one meal a day. Mercy was sent home last term because her fees were unpaid — but she still showed up every morning and waited outside the gate, hoping someone would let her in. She wants to be a doctor. One Bob Hope paid her fees. She is now back in school — and she has not missed a single day.' },
+    { img: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900&q=80', country: '🇪🇹 Addis Ababa — Ethiopia', name: 'Amara Tadesse', age: 'Age 7 · Orphan, Grandmother\'s Care', story: 'Amara has not seen his father since he was three. His grandmother, who is 74 and nearly blind, is his only family. They share a single room with no electricity or running water. Amara often goes to school without breakfast, sometimes without shoes. His teacher says he is the brightest child in class — he just needs a meal a day and someone to believe in him. You can be that person.' },
+    { img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=900&q=80', country: '🇺🇬 Kampala — Uganda', name: 'Emmanuel Okello', age: 'Age 13 · Children\'s Home', story: 'Emmanuel lost both parents to illness when he was eight. He has been living at a children\'s home in Kampala ever since, sharing a room with eleven other boys. Despite everything, Emmanuel has topped his class in mathematics for three consecutive years. His dream is to build a school in his village. He needs a scholarship to continue his secondary education — without it, he will have to leave school next term.' },
+    { img: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=900&q=80', country: '🇹🇿 Dar es Salaam — Tanzania', name: 'Zawadi Kimani', age: 'Age 11 · Medical Need', story: 'Zawadi was born with a treatable heart condition that her family cannot afford to treat. Her mother, a single parent of five, cleans offices at night and sells mandazi in the morning. Zawadi\'s condition means she tires easily, but she still tries to help her mother every day before school. The surgery she needs costs what her family earns in three years. She smiles every single day.' },
+    { img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&q=80', country: '🇷🇼 Kigali — Rwanda', name: 'Aline Uwimana', age: 'Age 6 · Care Centre', story: 'Aline was brought to the care centre severely malnourished at age four. Today, after two years of support, she has gained weight and started school. But the centre that saved her life is running out of funding. Thirty-two children like Aline depend on this centre for their daily meal — the only guaranteed food they will eat today. Without continued support, the centre will close its doors.' },
+    { img: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=900&q=80', country: '🇰🇪 Mombasa — Kenya', name: 'Fatuma Twalib', age: 'Age 12 · School Supported', story: 'Fatuma missed 40 days of school last year because her family could not afford the KSh 200 term fee. She spent those days at the market helping her mother sell fish, watching other children walk past in school uniforms. One Bob Hope covered her fees for the entire year. She has not missed a day since. She says she cries sometimes — not from sadness, but from gratitude that strangers she has never met cared enough to give.' },
+    { img: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900&q=80', country: '🇧🇮 Bujumbura — Burundi', name: 'Pierre Nkurunziza', age: 'Age 10 · Water Crisis', story: 'Pierre\'s village has no clean water source. Every day, he and his younger sister walk 6 kilometres to collect water from a river shared with livestock. The water makes them sick, but it is all they have. Pierre has missed 40 days of school this year alone due to waterborne illness. A borehole for his entire village costs what 2,000 people giving one bob each would raise. That is all it takes.' },
+    { img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=900&q=80', country: '🇪🇹 Gondar — Ethiopia', name: 'Biruk Alemu', age: 'Age 8 · Rural School', story: 'Biruk\'s school has no walls. The children sit on rocks under an acacia tree and write in the dirt when the chalk runs out. Their teacher, who has not been paid in three months, still shows up every day. Biruk walks 5 kilometres each way, barefoot. He has never owned a pencil. He borrows one from a classmate and returns it every afternoon. All he wants is a pencil of his own.' },
+    { img: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=900&q=80', country: '🇺🇬 Entebbe — Uganda', name: 'Grace Namutebi', age: 'Age 9 · Children\'s Home', story: 'Grace came to the children\'s home after her mother passed away and her father could not care for her. She was five years old, holding a small plastic bag with everything she owned. Four years later, Grace is the home\'s most cheerful resident. She sings every morning and has taught herself to read using old newspapers. She needs sponsorship for secondary school in two years — time is running.' },
+    { img: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=900&q=80', country: '🇹🇿 Dodoma — Tanzania', name: 'Juma Baraka', age: 'Age 10 · Poor School', story: 'Juma\'s school has 340 students and 2 teachers. The roof collapsed during last year\'s rains and was never repaired. Children now study in half the building, squeezed together in the heat. There are no textbooks — children share one book between six. Juma comes first in his class despite all of this. He has never complained once. His teacher says he is the kind of child who makes you believe in the future.' },
+    { img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&q=80', country: '🇷🇼 Musanze — Rwanda', name: 'Diane Mukamana', age: 'Age 7 · Nutrition Programme', story: 'Diane weighed 11kg when she arrived at the nutrition programme at age five — the weight of a two-year-old. She could barely stand. Two years later, she runs, plays, and top of her class. The programme that saved her serves 60 children every morning. The cost per child per day is less than one cup of tea. One bob a day keeps children like Diane alive and in school.' },
+    { img: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900&q=80', country: '🇰🇪 Kisumu — Kenya', name: 'Ouma and Friends', age: 'Ages 6–11 · Village School', story: 'These children walk together every morning to the only school in their village — a two-room building shared by 180 students across six grades. They do not complain about the crowding, the broken desks, or the single teacher who tries to teach all of them at once. They come because they know education is their only way forward. They come because someone, somewhere, believed in them enough to keep the school open.' },
+  ];
+
+  let currentLbIndex = 0;
+
+  function openLightbox(index) {
+    currentLbIndex = index;
+    renderLightbox(index);
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function renderLightbox(index) {
+    const p = PHOTOS[index];
+    document.getElementById('lbImg').src = p.img;
+    document.getElementById('lbImg').alt = p.name;
+    document.getElementById('lbCountry').textContent = p.country;
+    document.getElementById('lbName').textContent = p.name;
+    document.getElementById('lbAge').textContent = p.age;
+    document.getElementById('lbStory').textContent = p.story;
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeLightboxOutside(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  function lbNav(dir) {
+    currentLbIndex = (currentLbIndex + dir + PHOTOS.length) % PHOTOS.length;
+    renderLightbox(currentLbIndex);
+  }
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') lbNav(1);
+    if (e.key === 'ArrowLeft') lbNav(-1);
+  });
+
+  // Filter
+  function filterGallery(country, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      if (country === 'all' || item.dataset.country === country) {
+        item.classList.remove('hidden');
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+  }
+</script>
+</body>
+</html>
