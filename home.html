@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Bob Hope Charity — Stories</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --terra: #C4622D;
+      --amber: #E8A020;
+      --black: #0a0a0a;
+      --deep: #0d0b08;
+      --warm-white: #F5F0E8;
+      --muted: rgba(245,240,232,0.55);
+      --glass: rgba(245,240,232,0.04);
+      --glass-border: rgba(245,240,232,0.1);
+      --green: #2D4A35;
+    }
+    html, body { background: var(--black); color: var(--warm-white); font-family: 'Jost', sans-serif; overflow-x: hidden; }
+
+    /* NAV */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,8,4,0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 62px;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--warm-white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link {
+      padding: 8px 18px;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(245,240,232,0.55);
+      text-decoration: none; border-radius: 3px;
+      transition: all 0.2s; border: 1px solid transparent;
+      font-family: 'Jost', sans-serif;
+    }
+    .nav-link:hover { color: var(--warm-white); background: var(--glass); border-color: var(--glass-border); }
+    .nav-link.active { color: var(--warm-white); border-color: var(--glass-border); }
+    .nav-link.donate-btn { background: var(--terra); color: var(--warm-white); border-color: var(--terra); }
+    .nav-link.donate-btn:hover { background: #D4703A; }
+    .hamburger { display: none; background: none; border: none; color: var(--warm-white); font-size: 1.4rem; cursor: pointer; }
+    .mobile-menu { display: none; flex-direction: column; gap: 4px; padding: 12px 20px 16px; background: rgba(10,8,4,0.97); border-bottom: 1px solid var(--glass-border); }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { display: block; padding: 10px 14px; }
+
+    /* HERO */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 80px 36px 60px;
+      text-align: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(196,98,45,0.15) 0%, transparent 65%);
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--amber); margin-bottom: 18px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 300; line-height: 1.05;
+      margin-bottom: 20px;
+    }
+    .hero-title em { font-style: italic; color: var(--terra); }
+    .hero-sub {
+      max-width: 560px; margin: 0 auto;
+      font-size: 0.9rem; line-height: 1.8;
+      color: var(--muted); font-weight: 300;
+    }
+
+    /* IMPACT COUNTERS */
+    .impact-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--glass-border);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      margin: 48px 0 0;
+    }
+    .impact-cell {
+      background: var(--deep);
+      padding: 28px 20px; text-align: center;
+    }
+    .impact-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; font-weight: 600;
+      color: var(--amber); line-height: 1;
+      margin-bottom: 6px;
+    }
+    .impact-label {
+      font-size: 0.65rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* SECTION */
+    .section { padding: 72px 36px; max-width: 1200px; margin: 0 auto; }
+    .section-header { margin-bottom: 40px; }
+    .section-eyebrow {
+      font-size: 0.65rem; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--terra);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300; line-height: 1.1;
+    }
+    .section-title em { font-style: italic; color: var(--amber); }
+
+    /* STORY CARDS */
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .story-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px; overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .story-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(196,98,45,0.35);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .card-img {
+      width: 100%; height: 240px;
+      object-fit: cover; display: block;
+      filter: brightness(0.88) saturate(0.9);
+      transition: filter 0.4s, transform 0.4s;
+    }
+    .story-card:hover .card-img { filter: brightness(0.95) saturate(1.05); transform: scale(1.02); }
+    .card-img-wrap { overflow: hidden; position: relative; }
+    .card-country {
+      position: absolute; top: 14px; left: 14px;
+      background: rgba(10,8,4,0.78); backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border);
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--warm-white);
+    }
+    .card-goal {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(196,98,45,0.88);
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 0.65rem; letter-spacing: 0.08em; font-weight: 500;
+      color: var(--warm-white);
+    }
+    .card-body { padding: 22px 20px 20px; }
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .card-age { font-size: 0.72rem; color: var(--muted); margin-bottom: 14px; letter-spacing: 0.06em; }
+    .card-story {
+      font-size: 0.82rem; line-height: 1.8;
+      color: rgba(245,240,232,0.7); font-weight: 300;
+      margin-bottom: 18px;
+    }
+    /* Progress bar */
+    .progress-wrap { margin-bottom: 18px; }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.68rem; color: var(--muted);
+      margin-bottom: 6px; letter-spacing: 0.04em;
+    }
+    .progress-label span:last-child { color: var(--amber); }
+    .progress-bar {
+      height: 3px; background: rgba(245,240,232,0.1);
+      border-radius: 2px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--terra), var(--amber));
+      border-radius: 2px;
+      transition: width 1.2s ease;
+    }
+    .btn-help {
+      display: block; width: 100%;
+      padding: 11px; text-align: center;
+      background: transparent;
+      border: 1px solid var(--terra);
+      border-radius: 4px;
+      color: var(--terra);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-help:hover { background: var(--terra); color: var(--warm-white); }
+
+    /* TESTIMONIES */
+    .testimonies-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .testimony-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px; padding: 26px 22px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+    .testimony-card:hover { border-color: rgba(232,160,32,0.3); }
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem; line-height: 0.6;
+      color: var(--terra); opacity: 0.4;
+      margin-bottom: 12px; display: block;
+    }
+    .testimony-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic;
+      line-height: 1.75; color: rgba(245,240,232,0.82);
+      margin-bottom: 20px;
+    }
+    .testimony-author {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .author-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      object-fit: cover; filter: grayscale(0.2);
+      flex-shrink: 0;
+      background: var(--terra);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 600;
+    }
+    .author-name { font-size: 0.8rem; font-weight: 500; margin-bottom: 2px; }
+    .author-loc { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.06em; }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px; background: var(--glass-border);
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid var(--glass-border);
+      padding: 48px 36px 32px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .footer-logo span { color: var(--amber); }
+    .footer-tagline {
+      font-size: 0.8rem; color: var(--muted);
+      font-style: italic; margin-bottom: 28px;
+    }
+    .footer-flags { font-size: 1.4rem; letter-spacing: 4px; margin-bottom: 24px; }
+    .footer-links { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+    .footer-links a {
+      font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--amber); }
+    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.25); }
+    .transparency-note {
+      display: inline-block; margin: 0 auto 24px;
+      padding: 10px 20px;
+      background: rgba(45,74,53,0.2);
+      border: 1px solid rgba(45,74,53,0.4);
+      border-radius: 4px;
+      font-size: 0.72rem; color: rgba(245,240,232,0.6);
+      letter-spacing: 0.04em;
+    }
+    .transparency-note span { color: #6BBF7A; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .navbar { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .impact-strip { grid-template-columns: repeat(2, 1fr); }
+      .section { padding: 48px 20px; }
+      .hero { padding: 56px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">One <span>Bob</span> Hope</a>
+  <div class="nav-links">
+    <a href="#stories" class="nav-link active">Stories</a>
+    <a href="#testimonies" class="nav-link">Testimonies</a>
+    <a href="mission.html" class="nav-link">Mission & Vision</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#stories" class="nav-link">Stories</a>
+  <a href="#testimonies" class="nav-link">Testimonies</a>
+  <a href="mission.html" class="nav-link">Mission & Vision</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Kenya · Tanzania · Uganda · Rwanda · Burundi · Ethiopia</div>
+  <h1 class="hero-title">Every child has a name.<br/><em>Every name has a story.</em></h1>
+  <p class="hero-sub">Behind every face is a child who woke up this morning hoping today would be different. Your one bob can make it so.</p>
+
+  <!-- Impact counters -->
+  <div class="impact-strip">
+    <div class="impact-cell">
+      <div class="impact-num" id="cnt1">0</div>
+      <div class="impact-label">Total Donors</div>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num" id="cnt2">0</div>
+      <div class="impact-label">Children Helped</div>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num" id="cnt3">0</div>
+      <div class="impact-label">Schools Supported</div>
+    </div>
+    <div class="impact-cell">
+      <div class="impact-num" id="cnt4">0</div>
+      <div class="impact-label">Countries Reached</div>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES -->
+<section class="section" id="stories">
+  <div class="section-header">
+    <div class="section-eyebrow">Their Stories</div>
+    <h2 class="section-title">Children who need<br/><em>your one bob today</em></h2>
+  </div>
+
+  <div class="stories-grid">
+
+    <!-- Story 1 -->
+    <div class="story-card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80" alt="Mercy" class="card-img"/>
+        <span class="card-country">🇰🇪 Kenya</span>
+        <span class="card-goal">School Fees</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mercy Wanjiru</div>
+        <div class="card-age">Age 9 · Kibera, Nairobi</div>
+        <p class="card-story">Mercy walks 4 kilometres to school every morning before sunrise, carrying a torn bag held together with string. Her mother sells vegetables at the roadside market, earning barely enough for one meal a day. Mercy's school sent her home last term because her fees were unpaid — but she still shows up every morning and waits outside the gate, hoping someone will let her in. She wants to be a doctor.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>School fees goal</span><span>67% funded</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:67%"></div></div>
+        </div>
+        <a href="donate.html" class="btn-help">Help Mercy →</a>
+      </div>
+    </div>
+
+    <!-- Story 2 -->
+    <div class="story-card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600&q=80" alt="Amara" class="card-img"/>
+        <span class="card-country">🇪🇹 Ethiopia</span>
+        <span class="card-goal">Food & Shelter</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Amara Tadesse</div>
+        <div class="card-age">Age 7 · Addis Ababa</div>
+        <p class="card-story">Amara has not seen his father since he was three years old. His grandmother, who is 74 and nearly blind, is his only family. They share a single room with no electricity or running water. Amara often goes to school without breakfast, sometimes without shoes. His teacher says he is the brightest child in the class — he just needs one meal a day and someone to believe in him.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Monthly food support</span><span>43% funded</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:43%"></div></div>
+        </div>
+        <a href="donate.html" class="btn-help">Help Amara →</a>
+      </div>
+    </div>
+
+    <!-- Story 3 -->
+    <div class="story-card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80" alt="Zawadi" class="card-img"/>
+        <span class="card-country">🇹🇿 Tanzania</span>
+        <span class="card-goal">Medical Care</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Zawadi Kimani</div>
+        <div class="card-age">Age 11 · Dar es Salaam</div>
+        <p class="card-story">Zawadi was born with a treatable heart condition that her family cannot afford to treat. Her mother, a single parent of five, cleans offices at night and sells mandazi in the morning. Zawadi's condition means she tires easily, but she still tries to help her mother every day before school. The surgery she needs costs what her family earns in three years. She smiles every single day.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Surgery fund</span><span>29% funded</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:29%"></div></div>
+        </div>
+        <a href="donate.html" class="btn-help">Help Zawadi →</a>
+      </div>
+    </div>
+
+    <!-- Story 4 -->
+    <div class="story-card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" alt="Emmanuel" class="card-img"/>
+        <span class="card-country">🇺🇬 Uganda</span>
+        <span class="card-goal">Education</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Emmanuel Okello</div>
+        <div class="card-age">Age 13 · Kampala</div>
+        <p class="card-story">Emmanuel lost both parents to illness when he was eight. He has been living at a children's home in Kampala ever since, sharing a room with eleven other boys. Despite everything, Emmanuel has topped his class in mathematics for three consecutive years. His dream is to build a school in his village. He needs a scholarship to continue his secondary education — without it, he will have to leave school next term.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Secondary school scholarship</span><span>81% funded</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:81%"></div></div>
+        </div>
+        <a href="donate.html" class="btn-help">Help Emmanuel →</a>
+      </div>
+    </div>
+
+    <!-- Story 5 -->
+    <div class="story-card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&q=80" alt="Aline" class="card-img"/>
+        <span class="card-country">🇷🇼 Rwanda</span>
+        <span class="card-goal">Nutrition</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Aline Uwimana</div>
+        <div class="card-age">Age 6 · Kigali</div>
+        <p class="card-story">Aline was brought to the care centre severely malnourished at age four. Today, after two years of support, she has gained weight and started school. But the centre that saved her life is running out of funding. Thirty-two children like Aline depend on this centre for their daily meal — the only guaranteed food they will eat today. Without continued support, the centre will close its doors by the end of this month.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Centre monthly funding</span><span>55% funded</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+        </div>
+        <a href="donate.html" class="btn-help">Help Aline →</a>
+      </div>
+    </div>
+
+    <!-- Story 6 -->
+    <div class="story-card">
+      <div class="card-img-wrap">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80" alt="Pierre" class="card-img" style="object-position: top;"/>
+        <span class="card-country">🇧🇮 Burundi</span>
+        <span class="card-goal">Clean Water</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Pierre Nkurunziza</div>
+        <div class="card-age">Age 10 · Bujumbura</div>
+        <p class="card-story">Pierre's village has no clean water source. Every day, he and his younger sister walk 6 kilometres to collect water from a river shared with livestock. The water makes them sick, but it is all they have. Pierre has missed 40 days of school this year alone due to waterborne illness. A borehole for his entire village of 200 people costs what 2,000 people giving one bob each would raise. That is all it takes.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Village borehole fund</span><span>38% funded</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:38%"></div></div>
+        </div>
+        <a href="donate.html" class="btn-help">Help Pierre →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIES -->
+<section class="section" id="testimonies">
+  <div class="section-header">
+    <div class="section-eyebrow">Testimonies</div>
+    <h2 class="section-title">Voices of the<br/><em>communities we serve</em></h2>
+  </div>
+
+  <div class="testimonies-grid">
+
+    <div class="testimony-card">
+      <span class="quote-mark">"</span>
+      <p class="testimony-text">My son was about to drop out of school. One Bob Hope paid his fees for an entire year. Today he is in Form Three and tells everyone he wants to be an engineer. I cried when I found out someone I never met had given for my child.</p>
+      <div class="testimony-author">
+        <div class="author-avatar">JW</div>
+        <div>
+          <div class="author-name">Jane Wambua</div>
+          <div class="author-loc">Mother · Machakos, Kenya</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimony-card">
+      <span class="quote-mark">"</span>
+      <p class="testimony-text">We were feeding 18 children a day and then we ran out of money. One Bob Hope stepped in within a week. Now we feed 34 children every morning. These children do not have parents — they have each other and they have us. Now they also have you.</p>
+      <div class="testimony-author">
+        <div class="author-avatar">BM</div>
+        <div>
+          <div class="author-name">Brother Michael Ssebunya</div>
+          <div class="author-loc">Care Centre Director · Kampala, Uganda</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimony-card">
+      <span class="quote-mark">"</span>
+      <p class="testimony-text">I am twelve years old. Before, I used to sleep hungry every night. Now I eat breakfast before school and I can think clearly in class. My teacher says I am improving every week. I want to say thank you to every person who gave even one bob. It reached me.</p>
+      <div class="testimony-author">
+        <div class="author-avatar">FT</div>
+        <div>
+          <div class="author-name">Fatuma Twalib</div>
+          <div class="author-loc">Student, Age 12 · Mombasa, Kenya</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimony-card">
+      <span class="quote-mark">"</span>
+      <p class="testimony-text">Our school had no books. We were writing on the backs of old exercise books. One Bob Hope sent us 400 textbooks and repaired our roof before the rainy season. Our attendance has gone from 60% to 94% in one term. The children feel like they matter now.</p>
+      <div class="testimony-author">
+        <div class="author-avatar">HG</div>
+        <div>
+          <div class="author-name">Headmaster Grace Habimana</div>
+          <div class="author-loc">Primary School · Kigali, Rwanda</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">One <span>Bob</span> Hope Charity</div>
+  <div class="footer-tagline">"One bob from a million hearts changes everything."</div>
+  <div class="footer-flags">🇰🇪 🇹🇿 🇺🇬 🇷🇼 🇧🇮 🇪🇹</div>
+  <div class="transparency-note">
+    <span>80%</span> of every donation goes directly to children &nbsp;·&nbsp;
+    <span>10%</span> operations &nbsp;·&nbsp;
+    <span>10%</span> outreach
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="donate.html">Donate</a>
+    <a href="mission.html">Mission</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="testimonies.html">Testimonies</a>
+    <a href="mailto:hello@onebobhope.org">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
+</footer>
+
+<script>
+  // Mobile menu
+  function toggleMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  // Animated counters
+  function animateCounter(id, target, suffix='') {
+    const el = document.getElementById(id);
+    let current = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current.toLocaleString() + suffix;
+      if (current >= target) clearInterval(timer);
+    }, 30);
+  }
+
+  // Trigger counters when visible
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCounter('cnt1', 12847);
+        animateCounter('cnt2', 3421);
+        animateCounter('cnt3', 18);
+        animateCounter('cnt4', 6);
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(document.querySelector('.impact-strip'));
+</script>
+
+</body>
+</html>
