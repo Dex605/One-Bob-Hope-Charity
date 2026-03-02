@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Bob Hope Charity — Donate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --terra: #C4622D;
+      --amber: #E8A020;
+      --black: #0a0a0a;
+      --deep: #0d0b08;
+      --warm-white: #F5F0E8;
+      --muted: rgba(245,240,232,0.55);
+      --glass: rgba(245,240,232,0.04);
+      --glass-border: rgba(245,240,232,0.1);
+    }
+    html, body { background: var(--black); color: var(--warm-white); font-family: 'Jost', sans-serif; overflow-x: hidden; }
+
+    /* NAV */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,8,4,0.94); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0 36px; display: flex; align-items: center; justify-content: space-between; height: 62px;
+    }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--warm-white); text-decoration: none; }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link { padding: 8px 18px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.55); text-decoration: none; border-radius: 3px; transition: all 0.2s; border: 1px solid transparent; }
+    .nav-link:hover { color: var(--warm-white); background: var(--glass); border-color: var(--glass-border); }
+    .nav-link.donate-btn { background: var(--terra); color: var(--warm-white); border-color: var(--terra); }
+    .hamburger { display: none; background: none; border: none; color: var(--warm-white); font-size: 1.4rem; cursor: pointer; }
+    .mobile-menu { display: none; flex-direction: column; gap: 4px; padding: 12px 20px 16px; background: rgba(10,8,4,0.97); border-bottom: 1px solid var(--glass-border); }
+    .mobile-menu.open { display: flex; }
+
+    /* HERO */
+    .hero { padding: 64px 36px 48px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(196,98,45,0.12) 0%, transparent 65%); }
+    .hero-eyebrow { font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 300; line-height: 1.1; margin-bottom: 16px; }
+    .hero-title em { font-style: italic; color: var(--terra); }
+    .hero-sub { max-width: 480px; margin: 0 auto; font-size: 0.88rem; line-height: 1.8; color: var(--muted); font-weight: 300; }
+
+    /* MAIN */
+    .donate-wrap { max-width: 860px; margin: 0 auto; padding: 48px 36px 80px; }
+
+    /* STEP INDICATOR */
+    .steps { display: flex; align-items: center; gap: 0; margin-bottom: 48px; }
+    .step { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: var(--muted); flex-shrink: 0; transition: all 0.3s; }
+    .step-num.active { border-color: var(--terra); background: var(--terra); color: var(--warm-white); }
+    .step-num.done { border-color: var(--amber); background: var(--amber); color: var(--black); }
+    .step-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); transition: color 0.3s; }
+    .step-label.active { color: var(--warm-white); }
+    .step-line { flex: 1; height: 1px; background: var(--glass-border); margin: 0 12px; }
+
+    /* SECTION HEADING */
+    .step-heading { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 8px; }
+    .step-heading em { font-style: italic; color: var(--amber); }
+    .step-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+
+    /* COUNTRY GRID */
+    .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 40px; }
+    .country-card {
+      background: var(--glass); border: 1.5px solid var(--glass-border);
+      border-radius: 10px; padding: 22px 16px; text-align: center; cursor: pointer;
+      transition: all 0.25s;
+    }
+    .country-card:hover { border-color: rgba(196,98,45,0.4); background: rgba(196,98,45,0.06); }
+    .country-card.selected { border-color: var(--terra); background: rgba(196,98,45,0.1); }
+    .country-flag { font-size: 2.2rem; margin-bottom: 10px; display: block; }
+    .country-name { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .country-currency { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* PAYMENT METHODS */
+    .payment-section { display: none; }
+    .payment-section.visible { display: block; }
+    .payment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .payment-card {
+      background: var(--glass); border: 1.5px solid var(--glass-border);
+      border-radius: 8px; padding: 16px 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 12px;
+      transition: all 0.2s;
+    }
+    .payment-card:hover { border-color: rgba(196,98,45,0.4); background: rgba(196,98,45,0.06); }
+    .payment-card.selected { border-color: var(--terra); background: rgba(196,98,45,0.1); }
+    .pay-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .pay-name { font-size: 0.78rem; font-weight: 500; }
+    .pay-type { font-size: 0.62rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.06em; }
+
+    /* AMOUNT */
+    .amount-section { display: none; }
+    .amount-section.visible { display: block; }
+    .amount-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .amount-btn {
+      padding: 10px 20px; border: 1.5px solid var(--glass-border);
+      border-radius: 4px; background: var(--glass);
+      color: var(--warm-white); cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 500;
+      transition: all 0.2s;
+    }
+    .amount-btn:hover { border-color: rgba(196,98,45,0.4); background: rgba(196,98,45,0.06); }
+    .amount-btn.selected { border-color: var(--terra); background: rgba(196,98,45,0.15); color: var(--warm-white); }
+    .custom-amount-wrap { margin-bottom: 28px; }
+    .custom-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .custom-input {
+      width: 100%; padding: 12px 16px;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 6px; color: var(--warm-white);
+      font-family: 'Jost', sans-serif; font-size: 0.88rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .custom-input:focus { border-color: var(--terra); }
+    .custom-input::placeholder { color: rgba(245,240,232,0.25); }
+
+    /* PAYMENT INSTRUCTIONS */
+    .instructions-section { display: none; }
+    .instructions-section.visible { display: block; }
+    .instruction-card {
+      background: rgba(196,98,45,0.06); border: 1px solid rgba(196,98,45,0.25);
+      border-radius: 10px; padding: 28px 24px; margin-bottom: 24px;
+    }
+    .instr-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 6px; }
+    .instr-amount { font-size: 2rem; font-weight: 600; color: var(--amber); font-family: 'Cormorant Garamond', serif; margin-bottom: 20px; }
+    .instr-steps { list-style: none; }
+    .instr-steps li {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 12px 0; border-bottom: 1px solid rgba(245,240,232,0.06);
+      font-size: 0.83rem; line-height: 1.6; color: rgba(245,240,232,0.8);
+    }
+    .instr-steps li:last-child { border-bottom: none; }
+    .instr-num { width: 22px; height: 22px; border-radius: 50%; background: var(--terra); color: var(--warm-white); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 600; flex-shrink: 0; margin-top: 1px; }
+    .instr-highlight { color: var(--amber); font-weight: 600; }
+    .ref-box {
+      background: rgba(245,240,232,0.05); border: 1px solid var(--glass-border);
+      border-radius: 6px; padding: 12px 16px; margin-top: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ref-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .ref-id { font-size: 1rem; font-weight: 600; letter-spacing: 0.1em; color: var(--amber); }
+    .copy-btn { padding: 6px 14px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 4px; color: var(--muted); font-size: 0.68rem; cursor: pointer; transition: all 0.2s; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Jost', sans-serif; }
+    .copy-btn:hover { color: var(--warm-white); border-color: var(--amber); }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px; background: var(--terra); color: var(--warm-white);
+      border: none; border-radius: 4px; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase; transition: all 0.2s;
+    }
+    .btn-primary:hover { background: #D4703A; transform: translateY(-1px); }
+    .btn-primary:disabled { background: rgba(196,98,45,0.3); cursor: not-allowed; transform: none; }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px; background: transparent; color: var(--muted);
+      border: 1px solid var(--glass-border); border-radius: 4px; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; transition: all 0.2s;
+    }
+    .btn-secondary:hover { color: var(--warm-white); border-color: rgba(245,240,232,0.3); }
+    .btn-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+
+    /* THANK YOU */
+    .thankyou-section { display: none; text-align: center; padding: 40px 0; }
+    .thankyou-section.visible { display: block; }
+    .ty-icon { font-size: 3.5rem; margin-bottom: 20px; animation: popIn 0.6s ease forwards; }
+    @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
+    .ty-title { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 300; margin-bottom: 12px; }
+    .ty-title em { font-style: italic; color: var(--amber); }
+    .ty-sub { font-size: 0.88rem; color: var(--muted); line-height: 1.8; max-width: 480px; margin: 0 auto 32px; }
+    .ty-child-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; padding: 24px; max-width: 400px; margin: 0 auto 32px; }
+    .ty-child-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 6px; }
+    .ty-child-msg { font-size: 0.82rem; color: var(--muted); font-style: italic; line-height: 1.7; }
+    .share-text { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .share-msg {
+      background: rgba(245,240,232,0.05); border: 1px solid var(--glass-border);
+      border-radius: 6px; padding: 14px 16px; font-size: 0.82rem;
+      color: rgba(245,240,232,0.75); line-height: 1.6; text-align: left;
+      max-width: 480px; margin: 0 auto 20px;
+    }
+    .btn-share { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 4px; color: var(--warm-white); cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; transition: all 0.2s; margin: 0 6px; }
+    .btn-share:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* FOOTER */
+    footer { background: var(--deep); border-top: 1px solid var(--glass-border); padding: 40px 36px 28px; text-align: center; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+    .footer-logo span { color: var(--amber); }
+    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.25); margin-top: 16px; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 12px 0; }
+    .footer-links a { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--amber); }
+
+    @media (max-width: 768px) {
+      .navbar { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .donate-wrap { padding: 32px 20px 60px; }
+      .country-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { display: none; }
+      .hero { padding: 48px 20px 36px; }
+    }
+    @media (max-width: 400px) {
+      .country-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">One <span>Bob</span> Hope</a>
+  <div class="nav-links">
+    <a href="home.html" class="nav-link">Stories</a>
+    <a href="home.html#testimonies" class="nav-link">Testimonies</a>
+    <a href="mission.html" class="nav-link">Mission & Vision</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="home.html" class="nav-link">Stories</a>
+  <a href="home.html#testimonies" class="nav-link">Testimonies</a>
+  <a href="mission.html" class="nav-link">Mission & Vision</a>
+  <a href="gallery.html" class="nav-link">Gallery</a>
+  <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Every amount counts · No minimum · Give what you can</div>
+  <h1 class="hero-title">Every shilling counts.<br/><em>Choose yours.</em></h1>
+  <p class="hero-sub">Select your country, pick a payment method, and give any amount you are willing to give — even one bob makes a difference.</p>
+</section>
+
+<!-- DONATE -->
+<div class="donate-wrap">
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num active" id="sn1">1</div>
+      <div class="step-label active" id="sl1">Country</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num" id="sn2">2</div>
+      <div class="step-label" id="sl2">Payment</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num" id="sn3">3</div>
+      <div class="step-label" id="sl3">Amount</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-num" id="sn4">4</div>
+      <div class="step-label" id="sl4">Confirm</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: Country -->
+  <div id="step1">
+    <h2 class="step-heading">Choose your <em>country</em></h2>
+    <p class="step-sub">Select the country you are donating from. Payment options will appear based on your country.</p>
+    <div class="country-grid">
+      <div class="country-card" onclick="selectCountry('kenya', this)">
+        <span class="country-flag">🇰🇪</span>
+        <div class="country-name">Kenya</div>
+        <div class="country-currency">KES · Kenyan Shilling</div>
+      </div>
+      <div class="country-card" onclick="selectCountry('tanzania', this)">
+        <span class="country-flag">🇹🇿</span>
+        <div class="country-name">Tanzania</div>
+        <div class="country-currency">TZS · Tanzanian Shilling</div>
+      </div>
+      <div class="country-card" onclick="selectCountry('uganda', this)">
+        <span class="country-flag">🇺🇬</span>
+        <div class="country-name">Uganda</div>
+        <div class="country-currency">UGX · Ugandan Shilling</div>
+      </div>
+      <div class="country-card" onclick="selectCountry('rwanda', this)">
+        <span class="country-flag">🇷🇼</span>
+        <div class="country-name">Rwanda</div>
+        <div class="country-currency">RWF · Rwandan Franc</div>
+      </div>
+      <div class="country-card" onclick="selectCountry('burundi', this)">
+        <span class="country-flag">🇧🇮</span>
+        <div class="country-name">Burundi</div>
+        <div class="country-currency">BIF · Burundian Franc</div>
+      </div>
+      <div class="country-card" onclick="selectCountry('ethiopia', this)">
+        <span class="country-flag">🇪🇹</span>
+        <div class="country-name">Ethiopia</div>
+        <div class="country-currency">ETB · Ethiopian Birr</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Payment Method -->
+  <div id="step2" class="payment-section">
+    <h2 class="step-heading">Choose <em>payment method</em></h2>
+    <p class="step-sub" id="paySubText">Select how you would like to send your donation.</p>
+    <div class="payment-grid" id="paymentGrid"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goBack(1)">← Back</button>
+      <button class="btn-primary" id="btnStep2Next" onclick="goToStep3()" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Amount -->
+  <div id="step3" class="amount-section">
+    <h2 class="step-heading">Choose your <em>amount</em></h2>
+    <p class="step-sub" id="amtSubText">Start from as little as one bob. Every amount helps.</p>
+    <div class="amount-grid" id="amountGrid"></div>
+    <div class="custom-amount-wrap">
+      <div class="custom-label">Or enter your own amount</div>
+      <input type="number" class="custom-input" id="customAmt" placeholder="Enter amount..." oninput="onCustomAmt()"/>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goBack(2)">← Back</button>
+      <button class="btn-primary" id="btnStep3Next" onclick="goToStep4()" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Instructions -->
+  <div id="step4" class="instructions-section">
+    <h2 class="step-heading">Send your <em>donation</em></h2>
+    <p class="step-sub">Follow the steps below to complete your donation.</p>
+    <div class="instruction-card" id="instructionCard"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goBack(3)">← Back</button>
+      <button class="btn-primary" onclick="confirmDonation()">✓ I Have Donated</button>
+    </div>
+  </div>
+
+  <!-- THANK YOU -->
+  <div id="stepTY" class="thankyou-section">
+    <div class="ty-icon">🌍</div>
+    <h2 class="ty-title">Thank you for your<br/><em>one bob of hope</em></h2>
+    <p class="ty-sub">Your donation has been recorded. Every single contribution — no matter how small — reaches a child in East Africa who needs it most.</p>
+    <div class="ty-child-card">
+      <div class="ty-child-name" id="tyChildName">Mercy Wanjiru</div>
+      <div class="ty-child-msg">"Because of donors like you, children like me get to go to school, eat breakfast, and dream of a future. Thank you."</div>
+    </div>
+    <div class="share-text">Share your act of kindness</div>
+    <div class="share-msg" id="shareMsg"></div>
+    <div>
+      <button class="btn-share" onclick="copyShare()">📋 Copy Message</button>
+      <button class="btn-share" onclick="shareWhatsApp()">💬 Share on WhatsApp</button>
+    </div>
+    <br/><br/>
+    <a href="home.html" style="color:var(--amber);font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;">← See More Stories</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">One <span>Bob</span> Hope Charity</div>
+  <div class="footer-links">
+    <a href="home.html">Stories</a>
+    <a href="mission.html">Mission</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="mailto:hello@onebobhope.org">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
+</footer>
+
+<script>
+  // DATA
+  const COUNTRIES = {
+    kenya: {
+      name: 'Kenya', flag: '🇰🇪', currency: 'KES', symbol: 'KSh',
+      amounts: [1, 5, 10, 50, 100, 500, 1000],
+      payments: [
+        { id:'mpesa', icon:'📱', name:'M-Pesa', type:'Mobile Money', instructions: ['Go to M-Pesa on your phone','Select <strong>Lipa na M-Pesa → Pay Bill</strong>','Business Number: <span class="instr-highlight">522533</span>','Account Number: <span class="instr-highlight">1234567</span> (your Donation ID)','Enter your amount and M-Pesa PIN','You will receive a confirmation SMS'] },
+        { id:'airtel', icon:'📲', name:'Airtel Money', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*334#</span> on your phone','Select <strong>Make Payments → Pay Bill</strong>','Enter Business: <span class="instr-highlight">ONEBOBHOPE</span>','Enter your Donation ID as reference','Enter amount and confirm with PIN'] },
+        { id:'bank', icon:'🏦', name:'Bank Transfer', type:'Bank', instructions: ['Bank: <span class="instr-highlight">Equity Bank Kenya</span>','Account Name: <span class="instr-highlight">One Bob Hope Charity</span>','Account No: <span class="instr-highlight">0190299372685</span>','Branch: Nairobi CBD','Use your Donation ID as reference'] },
+        { id:'paypal', icon:'💳', name:'PayPal', type:'International', instructions: ['Go to <span class="instr-highlight">paypal.me/onebobhope</span>','Enter the amount in KES or USD','Add your Donation ID in the note','Complete payment with your PayPal account'] },
+        { id:'crypto', icon:'🔐', name:'Crypto / Binance', type:'Wallet', instructions: ['Open Binance or your crypto wallet','Send to USDT (TRC20): <span class="instr-highlight">TQn8...xR3f</span>','Or BTC: <span class="instr-highlight">1A1zP...Gk25</span>','Include your Donation ID in memo','Screenshot and email to hello@onebobhope.org'] },
+      ]
+    },
+    tanzania: {
+      name: 'Tanzania', flag: '🇹🇿', currency: 'TZS', symbol: 'TSh',
+      amounts: [10, 50, 100, 500, 1000, 5000],
+      payments: [
+        { id:'mpesa_tz', icon:'📱', name:'M-Pesa TZ', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*150*00#</span>','Select <strong>Lipa → Lipa na M-Pesa</strong>','Enter number: <span class="instr-highlight">5225339</span>','Enter your Donation ID as reference','Enter amount and confirm with PIN'] },
+        { id:'tigo', icon:'📲', name:'Tigo Pesa', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*150*01#</span>','Select <strong>Malipo → Lipa Bili</strong>','Enter business code: <span class="instr-highlight">ONEBOB</span>','Enter Donation ID and amount','Confirm with your PIN'] },
+        { id:'airtel_tz', icon:'📡', name:'Airtel TZ', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*150*60#</span>','Select <strong>Payments</strong>','Enter merchant: <span class="instr-highlight">ONEBOBHOPE</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'halo', icon:'🌐', name:'Halopesa', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*150*88#</span>','Select <strong>Malipo ya Biashara</strong>','Enter code: <span class="instr-highlight">ONEBOB</span>','Enter Donation ID as reference','Confirm with PIN'] },
+        { id:'bank_tz', icon:'🏦', name:'Bank Transfer', type:'Bank', instructions: ['Bank: <span class="instr-highlight">CRDB Bank Tanzania</span>','Account: <span class="instr-highlight">0150398982900</span>','Account Name: One Bob Hope Charity','Use your Donation ID as reference'] },
+        { id:'paypal', icon:'💳', name:'PayPal', type:'International', instructions: ['Go to <span class="instr-highlight">paypal.me/onebobhope</span>','Enter amount in TZS or USD','Add Donation ID in note'] },
+        { id:'crypto', icon:'🔐', name:'Crypto / Binance', type:'Wallet', instructions: ['Send USDT (TRC20) to: <span class="instr-highlight">TQn8...xR3f</span>','Include Donation ID in memo','Email receipt to hello@onebobhope.org'] },
+      ]
+    },
+    uganda: {
+      name: 'Uganda', flag: '🇺🇬', currency: 'UGX', symbol: 'UGX',
+      amounts: [100, 500, 1000, 5000, 10000, 50000],
+      payments: [
+        { id:'mtn', icon:'📱', name:'MTN Mobile Money', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*165#</span>','Select <strong>Payments → Pay a Code</strong>','Enter code: <span class="instr-highlight">ONEBOBHOPE</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'airtel_ug', icon:'📲', name:'Airtel Money UG', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*185#</span>','Select <strong>Make Payments</strong>','Enter merchant: <span class="instr-highlight">ONEBOB</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'stanbic', icon:'🏦', name:'Stanbic Bank', type:'Bank', instructions: ['Bank: <span class="instr-highlight">Stanbic Bank Uganda</span>','Account: <span class="instr-highlight">9030005701483</span>','Account Name: One Bob Hope Charity','Reference: Your Donation ID'] },
+        { id:'paypal', icon:'💳', name:'PayPal', type:'International', instructions: ['Go to <span class="instr-highlight">paypal.me/onebobhope</span>','Enter amount and add Donation ID in note'] },
+        { id:'crypto', icon:'🔐', name:'Crypto / Binance', type:'Wallet', instructions: ['Send USDT (TRC20) to: <span class="instr-highlight">TQn8...xR3f</span>','Include Donation ID in memo'] },
+      ]
+    },
+    rwanda: {
+      name: 'Rwanda', flag: '🇷🇼', currency: 'RWF', symbol: 'RWF',
+      amounts: [10, 50, 100, 500, 1000, 5000],
+      payments: [
+        { id:'mtn_rw', icon:'📱', name:'MTN MoMo RW', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*182#</span>','Select <strong>1. MoMo Pay</strong>','Enter code: <span class="instr-highlight">ONEBOBHOPE</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'airtel_rw', icon:'📲', name:'Airtel Money RW', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*185#</span>','Select <strong>Make Payment</strong>','Merchant: <span class="instr-highlight">ONEBOB</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'bank_rw', icon:'🏦', name:'Bank of Kigali', type:'Bank', instructions: ['Bank: <span class="instr-highlight">Bank of Kigali</span>','Account: <span class="instr-highlight">00040-06120782-17</span>','Name: One Bob Hope Charity','Reference: Your Donation ID'] },
+        { id:'paypal', icon:'💳', name:'PayPal', type:'International', instructions: ['Go to <span class="instr-highlight">paypal.me/onebobhope</span>','Enter amount and Donation ID'] },
+        { id:'crypto', icon:'🔐', name:'Crypto / Binance', type:'Wallet', instructions: ['Send USDT (TRC20) to: <span class="instr-highlight">TQn8...xR3f</span>','Include Donation ID in memo'] },
+      ]
+    },
+    burundi: {
+      name: 'Burundi', flag: '🇧🇮', currency: 'BIF', symbol: 'BIF',
+      amounts: [10, 50, 100, 500, 1000, 5000],
+      payments: [
+        { id:'lumicash', icon:'📱', name:'Lumicash', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*144#</span>','Select <strong>Paiement</strong>','Code marchand: <span class="instr-highlight">ONEBOB</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'ecocash', icon:'📲', name:'Ecocash', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*111#</span>','Select <strong>Pay Merchant</strong>','Enter code: <span class="instr-highlight">ONEBOBHOPE</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'bank_bi', icon:'🏦', name:'Bank Transfer', type:'Bank', instructions: ['Bank: <span class="instr-highlight">Banque Commerciale du Burundi</span>','Account: <span class="instr-highlight">40001-10004-00132140185</span>','Name: One Bob Hope Charity','Reference: Your Donation ID'] },
+        { id:'paypal', icon:'💳', name:'PayPal', type:'International', instructions: ['Go to <span class="instr-highlight">paypal.me/onebobhope</span>','Enter amount and Donation ID'] },
+        { id:'crypto', icon:'🔐', name:'Crypto / Binance', type:'Wallet', instructions: ['Send USDT (TRC20) to: <span class="instr-highlight">TQn8...xR3f</span>','Include Donation ID in memo'] },
+      ]
+    },
+    ethiopia: {
+      name: 'Ethiopia', flag: '🇪🇹', currency: 'ETB', symbol: 'ETB',
+      amounts: [1, 5, 10, 50, 100, 500],
+      payments: [
+        { id:'telebirr', icon:'📱', name:'Telebirr', type:'Mobile Money', instructions: ['Open Telebirr app','Select <strong>Pay</strong>','Enter merchant: <span class="instr-highlight">ONEBOBHOPE</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'cbe', icon:'🏛️', name:'CBE Birr', type:'Mobile Money', instructions: ['Open CBE Birr app or dial <span class="instr-highlight">*847#</span>','Select <strong>Payment</strong>','Enter code: <span class="instr-highlight">ONEBOB</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'hello', icon:'📲', name:'HelloCash', type:'Mobile Money', instructions: ['Dial <span class="instr-highlight">*854#</span>','Select <strong>Pay</strong>','Merchant: <span class="instr-highlight">ONEBOBHOPE</span>','Enter Donation ID and amount','Confirm with PIN'] },
+        { id:'bank_et', icon:'🏦', name:'Bank Transfer', type:'Bank', instructions: ['Bank: <span class="instr-highlight">Commercial Bank of Ethiopia</span>','Account: <span class="instr-highlight">1000097645289</span>','Name: One Bob Hope Charity','Reference: Your Donation ID'] },
+        { id:'paypal', icon:'💳', name:'PayPal', type:'International', instructions: ['Go to <span class="instr-highlight">paypal.me/onebobhope</span>','Enter amount and Donation ID'] },
+        { id:'crypto', icon:'🔐', name:'Crypto / Binance', type:'Wallet', instructions: ['Send USDT (TRC20) to: <span class="instr-highlight">TQn8...xR3f</span>','Include Donation ID in memo'] },
+      ]
+    }
+  };
+
+  const CHILDREN = ['Mercy Wanjiru', 'Amara Tadesse', 'Zawadi Kimani', 'Emmanuel Okello', 'Aline Uwimana', 'Pierre Nkurunziza'];
+
+  let selected = { country: null, payment: null, amount: null };
+  let donationId = 'OBH-' + Math.random().toString(36).substr(2,8).toUpperCase();
+
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  function setStep(n) {
+    [1,2,3,4].forEach(i => {
+      const num = document.getElementById('sn'+i);
+      const lbl = document.getElementById('sl'+i);
+      if (i < n) { num.classList.add('done'); num.classList.remove('active'); num.textContent = '✓'; }
+      else if (i === n) { num.classList.add('active'); num.classList.remove('done'); num.textContent = i; lbl.classList.add('active'); }
+      else { num.classList.remove('active','done'); num.textContent = i; lbl.classList.remove('active'); }
+    });
+  }
+
+  function selectCountry(key, el) {
+    document.querySelectorAll('.country-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selected.country = key;
+    selected.payment = null;
+    selected.amount = null;
+
+    const c = COUNTRIES[key];
+    // Build payment grid
+    document.getElementById('paySubText').textContent = `Choose how you want to donate from ${c.name}.`;
+    const grid = document.getElementById('paymentGrid');
+    grid.innerHTML = c.payments.map(p => `
+      <div class="payment-card" onclick="selectPayment('${p.id}', this)">
+        <div class="pay-icon">${p.icon}</div>
+        <div><div class="pay-name">${p.name}</div><div class="pay-type">${p.type}</div></div>
+      </div>`).join('');
+
+    // Show step 2
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').classList.add('visible');
+    document.getElementById('btnStep2Next').disabled = true;
+    setStep(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectPayment(id, el) {
+    document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selected.payment = id;
+    document.getElementById('btnStep2Next').disabled = false;
+  }
+
+  function goToStep3() {
+    if (!selected.payment) return;
+    const c = COUNTRIES[selected.country];
+    document.getElementById('amtSubText').textContent = `Minimum: ${c.symbol} ${c.amounts[0].toLocaleString()} · Give any amount you can.`;
+
+    const grid = document.getElementById('amountGrid');
+    grid.innerHTML = c.amounts.map(a => `<button class="amount-btn" onclick="selectAmount(${a}, this)">${c.symbol} ${a.toLocaleString()}</button>`).join('');
+
+    document.getElementById('step2').classList.remove('visible');
+    document.getElementById('step3').classList.add('visible');
+    document.getElementById('customAmt').value = '';
+    document.getElementById('btnStep3Next').disabled = true;
+    setStep(3);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectAmount(amt, el) {
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selected.amount = amt;
+    document.getElementById('customAmt').value = '';
+    document.getElementById('btnStep3Next').disabled = false;
+  }
+
+  function onCustomAmt() {
+    const val = parseFloat(document.getElementById('customAmt').value);
+    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+    if (val > 0) { selected.amount = val; document.getElementById('btnStep3Next').disabled = false; }
+    else { selected.amount = null; document.getElementById('btnStep3Next').disabled = true; }
+  }
+
+  function goToStep4() {
+    if (!selected.amount) return;
+    const c = COUNTRIES[selected.country];
+    const pay = c.payments.find(p => p.id === selected.payment);
+    const card = document.getElementById('instructionCard');
+
+    card.innerHTML = `
+      <div class="instr-title">${pay.icon} ${pay.name} — ${c.flag} ${c.name}</div>
+      <div class="instr-amount">${c.symbol} ${Number(selected.amount).toLocaleString()}</div>
+      <ul class="instr-steps">
+        ${pay.instructions.map((s,i) => `<li><div class="instr-num">${i+1}</div><div>${s}</div></li>`).join('')}
+      </ul>
+      <div class="ref-box">
+        <div><div class="ref-label">Your Donation ID</div><div class="ref-id">${donationId}</div></div>
+        <button class="copy-btn" onclick="copyRef()">Copy</button>
+      </div>
+    `;
+
+    document.getElementById('step3').classList.remove('visible');
+    document.getElementById('step4').classList.add('visible');
+    setStep(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goBack(toStep) {
+    if (toStep === 1) {
+      document.getElementById('step2').classList.remove('visible');
+      document.getElementById('step1').style.display = 'block';
+      setStep(1);
+    } else if (toStep === 2) {
+      document.getElementById('step3').classList.remove('visible');
+      document.getElementById('step2').classList.add('visible');
+      setStep(2);
+    } else if (toStep === 3) {
+      document.getElementById('step4').classList.remove('visible');
+      document.getElementById('step3').classList.add('visible');
+      setStep(3);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function confirmDonation() {
+    const c = COUNTRIES[selected.country];
+    const child = CHILDREN[Math.floor(Math.random() * CHILDREN.length)];
+    document.getElementById('tyChildName').textContent = child;
+    const msg = `I just donated ${c.symbol} ${Number(selected.amount).toLocaleString()} to One Bob Hope Charity to help ${child} and children like them in East Africa. One bob from a million hearts changes everything. Join me 👉 https://dex605.github.io/One-Bob-Hope-Charity/donate.html`;
+    document.getElementById('shareMsg').textContent = msg;
+
+    document.getElementById('step4').classList.remove('visible');
+    document.getElementById('stepTY').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyRef() {
+    navigator.clipboard.writeText(donationId).then(() => {
+      document.querySelector('.copy-btn').textContent = 'Copied!';
+      setTimeout(() => document.querySelector('.copy-btn').textContent = 'Copy', 2000);
+    });
+  }
+
+  function copyShare() {
+    navigator.clipboard.writeText(document.getElementById('shareMsg').textContent);
+    alert('Message copied! Share it with your friends.');
+  }
+
+  function shareWhatsApp() {
+    const msg = encodeURIComponent(document.getElementById('shareMsg').textContent);
+    window.open('https://wa.me/?text=' + msg, '_blank');
+  }
+</script>
+</body>
+</html>
