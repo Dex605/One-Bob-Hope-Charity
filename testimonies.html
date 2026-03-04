@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>One Bob Hope Charity — Testimonies</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="apple-touch-icon" href="favicon-256.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -483,12 +486,12 @@
     <a href="donate.html">Donate</a>
     <a href="mission.html">Mission</a>
     <a href="gallery.html">Gallery</a>
-    <a href="mailto:hello@onebobhope.org">Contact</a>
+    <a href="/cdn-cgi/l/email-protection#9cf4f9f0f0f3dcf3f2f9fef3fef4f3ecf9b2f3eefb">Contact</a>
   </div>
   <div class="footer-copy">© 2025 One Bob Hope Charity · All testimonies are real and shared with permission</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 
   function filterTestimonies(type, btn) {
@@ -496,9 +499,9 @@
     btn.classList.add('active');
     document.querySelectorAll('.testimony-card').forEach(card => {
       if (type === 'all' || card.dataset.type === type) {
-        card.classList.remove('hidden');
+        card.style.display = '';
       } else {
-        card.classList.add('hidden');
+        card.style.display = 'none';
       }
     });
   }

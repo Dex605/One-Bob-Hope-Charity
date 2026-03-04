@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>One Bob Hope Charity — Contact Us</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="apple-touch-icon" href="favicon-256.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -90,7 +93,7 @@
     <div class="info-card">
       <div class="info-icon">📧</div>
       <div class="info-label">Email Us</div>
-      <div class="info-value"><a href="mailto:hello@onebobhope.org">hello@onebobhope.org</a><br/>We reply within 24 hours.</div>
+      <div class="info-value"><a href="/cdn-cgi/l/email-protection#650d0009090a250a0b00070a070d0a15004b0a1702"><span class="__cf_email__" data-cfemail="c9a1aca5a5a689a6a7acaba6aba1a6b9ace7a6bbae">[email&#160;protected]</span></a><br/>We reply within 24 hours.</div>
     </div>
     <div class="info-card">
       <div class="info-icon">📱</div>
@@ -123,7 +126,7 @@
     <div class="info-card">
       <div class="info-icon">🤝</div>
       <div class="info-label">Partnerships</div>
-      <div class="info-value">We welcome NGOs, schools, businesses, and community groups who want to partner with us.<br/><a href="mailto:partners@onebobhope.org">partners@onebobhope.org</a></div>
+      <div class="info-value">We welcome NGOs, schools, businesses, and community groups who want to partner with us.<br/><a href="/cdn-cgi/l/email-protection#0e7e6f7c7a606b7c7d4e61606b6c616c66617e6b20617c69"><span class="__cf_email__" data-cfemail="53233221273d362120133c3d36313c313b3c23367d3c2134">[email&#160;protected]</span></a></div>
     </div>
   </div>
 
@@ -183,14 +186,13 @@
   </div>
   <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary</div>
 </footer>
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
   function sendMessage() {
     const name = document.getElementById('contactName').value.trim();
     const email = document.getElementById('contactEmail').value.trim();
     const message = document.getElementById('contactMessage').value.trim();
     if (!name || !email || !message) { alert('Please fill in your name, email and message.'); return; }
-    // In production this would send to a backend — for now show success
     document.getElementById('successMsg').classList.add('visible');
     document.getElementById('contactName').value = '';
     document.getElementById('contactEmail').value = '';
