@@ -373,7 +373,8 @@
   <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
 <script>
   // DATA
   const COUNTRIES = {
@@ -580,8 +581,7 @@
 
     // Save to Supabase
     try {
-      const { createClient } = supabase;
-      const sb = createClient(
+      const sb = supabase.createClient(
         'https://uexskvkzhzcwymzohert.supabase.co',
         'sb_publishable_Jp3n7i3cAG0MAcBR_a6zEg_Vp92qCjJ'
       );
