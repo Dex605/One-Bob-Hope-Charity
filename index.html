@@ -7,441 +7,90 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --terra: #C4622D;
-      --amber: #E8A020;
-      --gold: #D4A853;
-      --black: #0a0a0a;
-      --deep: #111008;
-      --warm-white: #F5F0E8;
-      --muted: rgba(245,240,232,0.55);
-      --green: #2D4A35;
+      --terra: #C4622D; --amber: #E8A020; --black: #0a0a0a; --deep: #0d0b08;
+      --warm-white: #F5F0E8; --muted: rgba(245,240,232,0.55);
+      --glass: rgba(245,240,232,0.04); --glass-border: rgba(245,240,232,0.1);
     }
-
-    html, body {
-      height: 100%;
-      background: var(--black);
-      color: var(--warm-white);
-      font-family: 'Jost', sans-serif;
-      overflow-x: hidden;
-      cursor: none;
-    }
-
-    /* Custom cursor */
-    .cursor {
-      position: fixed;
-      width: 12px; height: 12px;
-      background: var(--amber);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      position: fixed;
-      width: 36px; height: 36px;
-      border: 1px solid rgba(232,160,32,0.5);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
-    }
-
-    /* Slideshow */
-    .slideshow {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-    }
-    .slide {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 1.8s ease-in-out;
-      animation: kenBurns 12s ease-in-out infinite alternate;
-    }
+    html, body { height: 100%; background: var(--black); color: var(--warm-white); font-family: 'Jost', sans-serif; overflow-x: hidden; cursor: none; }
+    .cursor { position: fixed; width: 12px; height: 12px; background: var(--amber); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.1s, width 0.2s, height 0.2s; mix-blend-mode: difference; }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(232,160,32,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: transform 0.18s ease-out, width 0.3s, height 0.3s; }
+    .slideshow { position: fixed; inset: 0; z-index: 0; }
+    .slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.8s ease-in-out; animation: kenBurns 12s ease-in-out infinite alternate; }
     .slide.active { opacity: 1; }
-
-    /* Using beautiful African landscape/people images from Unsplash */
-    .slide:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&q=80'); animation-delay: 0s; }
+    .slide:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&q=80'); }
     .slide:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1920&q=80'); animation-delay: -4s; }
     .slide:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1920&q=80'); animation-delay: -8s; }
     .slide:nth-child(4) { background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=1920&q=80'); animation-delay: -2s; }
     .slide:nth-child(5) { background-image: url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1920&q=80'); animation-delay: -6s; }
-
-    @keyframes kenBurns {
-      0% { transform: scale(1) translate(0, 0); }
-      100% { transform: scale(1.12) translate(-2%, -1%); }
-    }
-
-    /* Warm layered overlay */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      background:
-        linear-gradient(to bottom,
-          rgba(10,8,4,0.72) 0%,
-          rgba(10,8,4,0.45) 40%,
-          rgba(10,8,4,0.65) 70%,
-          rgba(10,8,4,0.92) 100%),
-        radial-gradient(ellipse at 30% 50%, rgba(196,98,45,0.18) 0%, transparent 60%);
-    }
-
-    /* Grain texture */
-    .grain {
-      position: fixed;
-      inset: 0;
-      z-index: 2;
-      opacity: 0.035;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-size: 200px;
-    }
-
-    /* Main content */
-    .content {
-      position: relative;
-      z-index: 10;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 24px 120px;
-      text-align: center;
-    }
-
-    /* Logo mark */
-    .logo-mark {
-      width: 52px; height: 52px;
-      border: 1.5px solid var(--amber);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 32px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 0.3s;
-    }
-    .logo-mark svg { width: 24px; height: 24px; }
-
-    /* Eyebrow */
-    .eyebrow {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 20px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 0.5s;
-    }
-
-    /* Main headline */
-    .headline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3.2rem, 10vw, 8rem);
-      font-weight: 300;
-      line-height: 0.92;
-      letter-spacing: -0.02em;
-      color: var(--warm-white);
-      margin-bottom: 8px;
-      opacity: 0;
-      animation: fadeUp 1.2s ease forwards 0.7s;
-    }
-    .headline em {
-      font-style: italic;
-      color: var(--amber);
-    }
-    .headline .line2 {
-      display: block;
-      font-weight: 600;
-      font-size: clamp(3.8rem, 11vw, 9.5rem);
-      letter-spacing: -0.03em;
-      color: var(--terra);
-      animation-delay: 0.9s;
-    }
-
-    /* Tagline */
-    .tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-      font-weight: 300;
-      font-style: italic;
-      color: var(--muted);
-      margin: 28px 0 48px;
-      max-width: 560px;
-      line-height: 1.6;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 1.1s;
-    }
+    @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.12) translate(-2%,-1%); } }
+    .overlay { position: fixed; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(10,8,4,0.72) 0%, rgba(10,8,4,0.45) 40%, rgba(10,8,4,0.65) 70%, rgba(10,8,4,0.92) 100%), radial-gradient(ellipse at 30% 50%, rgba(196,98,45,0.18) 0%, transparent 60%); }
+    .grain { position: fixed; inset: 0; z-index: 2; opacity: 0.035; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); background-size: 200px; }
+    .top-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 20; padding: 20px 36px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: var(--warm-white); text-decoration: none; }
+    .nav-logo span { color: var(--amber); }
+    .nav-right { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+    .content { position: relative; z-index: 10; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px 120px; text-align: center; }
+    .logo-mark { width: 52px; height: 52px; border: 1.5px solid var(--amber); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; opacity: 0; animation: fadeUp 1s ease forwards 0.3s; }
+    .eyebrow { font-size: 0.68rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--amber); margin-bottom: 20px; opacity: 0; animation: fadeUp 1s ease forwards 0.5s; }
+    .headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.2rem, 10vw, 8rem); font-weight: 300; line-height: 0.92; color: var(--warm-white); margin-bottom: 8px; opacity: 0; animation: fadeUp 1.2s ease forwards 0.7s; }
+    .headline em { font-style: italic; color: var(--amber); }
+    .headline .line2 { display: block; font-weight: 600; font-size: clamp(3.8rem, 11vw, 9.5rem); color: var(--terra); }
+    .tagline { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 300; font-style: italic; color: var(--muted); margin: 28px 0 48px; max-width: 560px; line-height: 1.6; opacity: 0; animation: fadeUp 1s ease forwards 1.1s; }
     .tagline span { color: var(--amber); font-style: normal; }
-
-    /* Name explanation */
-    .name-story {
-      max-width: 520px;
-      background: rgba(245,240,232,0.04);
-      border: 1px solid rgba(245,240,232,0.1);
-      border-left: 3px solid var(--terra);
-      border-radius: 2px;
-      padding: 20px 24px;
-      margin-bottom: 52px;
-      text-align: left;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 1.3s;
-    }
-    .name-story p {
-      font-size: 0.83rem;
-      line-height: 1.85;
-      color: rgba(245,240,232,0.65);
-      font-family: 'Jost', sans-serif;
-      font-weight: 300;
-    }
+    .name-story { max-width: 520px; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-left: 3px solid var(--terra); border-radius: 2px; padding: 20px 24px; margin-bottom: 52px; text-align: left; opacity: 0; animation: fadeUp 1s ease forwards 1.3s; }
+    .name-story p { font-size: 0.83rem; line-height: 1.85; color: rgba(245,240,232,0.65); font-weight: 300; }
     .name-story p strong { color: var(--amber); font-weight: 500; }
-
-    /* Mission / Vision cards */
-    .mv-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      max-width: 680px;
-      width: 100%;
-      margin-bottom: 56px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 1.5s;
-    }
-    .mv-card {
-      background: rgba(245,240,232,0.04);
-      border: 1px solid rgba(245,240,232,0.1);
-      border-radius: 8px;
-      padding: 22px 20px;
-      text-align: left;
-      transition: background 0.3s, border-color 0.3s;
-    }
-    .mv-card:hover {
-      background: rgba(196,98,45,0.08);
-      border-color: rgba(196,98,45,0.35);
-    }
-    .mv-label {
-      font-size: 0.62rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--terra);
-      margin-bottom: 10px;
-      font-family: 'Jost', sans-serif;
-    }
-    .mv-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      font-weight: 400;
-      line-height: 1.65;
-      color: rgba(245,240,232,0.8);
-    }
-
-    /* CTA Button */
-    .cta-wrap {
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 1.7s;
-    }
-    .btn-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 42px;
-      background: var(--terra);
-      color: var(--warm-white);
-      border: none;
-      border-radius: 3px;
-      font-family: 'Jost', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      cursor: none;
-      text-decoration: none;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s, transform 0.2s;
-      animation: pulse 3s ease-in-out infinite 2.5s;
-    }
-    .btn-cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%);
-      transform: translateX(-100%);
-      transition: transform 0.6s;
-    }
-    .btn-cta:hover::before { transform: translateX(100%); }
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 680px; width: 100%; margin-bottom: 56px; opacity: 0; animation: fadeUp 1s ease forwards 1.5s; }
+    .mv-card { background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-radius: 8px; padding: 22px 20px; text-align: left; transition: background 0.3s, border-color 0.3s; }
+    .mv-card:hover { background: rgba(196,98,45,0.08); border-color: rgba(196,98,45,0.35); }
+    .mv-label { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; }
+    .mv-text { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; line-height: 1.65; color: rgba(245,240,232,0.8); }
+    .cta-wrap { opacity: 0; animation: fadeUp 1s ease forwards 1.7s; }
+    .btn-cta { display: inline-flex; align-items: center; gap: 14px; padding: 18px 42px; background: var(--terra); color: var(--warm-white); border: none; border-radius: 3px; font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; cursor: none; text-decoration: none; position: relative; overflow: hidden; transition: background 0.3s, transform 0.2s; }
     .btn-cta:hover { background: #D4703A; transform: translateY(-2px); }
-    .btn-cta .arrow {
-      display: inline-block;
-      transition: transform 0.3s;
-    }
+    .arrow { display: inline-block; transition: transform 0.3s; }
     .btn-cta:hover .arrow { transform: translateX(5px); }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(196,98,45,0); }
-      50% { box-shadow: 0 0 0 14px rgba(196,98,45,0); }
-    }
-
-    /* Countries strip */
-    .countries-strip {
-      position: fixed;
-      bottom: 60px;
-      left: 0; right: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      padding: 0 20px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 2s;
-    }
-    .country-flag {
-      font-size: 1.6rem;
-      filter: grayscale(0.3);
-      transition: transform 0.2s, filter 0.2s;
-      cursor: none;
-      title: attr(data-name);
-    }
+    .slide-dots { position: fixed; right: 24px; top: 50%; transform: translateY(-50%); z-index: 10; display: flex; flex-direction: column; gap: 8px; }
+    .dot-ind { width: 4px; height: 4px; border-radius: 50%; background: rgba(245,240,232,0.25); transition: all 0.3s; }
+    .dot-ind.active { background: var(--amber); height: 24px; border-radius: 2px; }
+    .countries-strip { position: fixed; bottom: 60px; left: 0; right: 0; z-index: 10; display: flex; justify-content: center; gap: 6px; opacity: 0; animation: fadeUp 1s ease forwards 2s; }
+    .country-flag { font-size: 1.6rem; filter: grayscale(0.3); transition: transform 0.2s, filter 0.2s; }
     .country-flag:hover { transform: scale(1.3); filter: grayscale(0); }
-
-    /* Donation Ticker */
-    .ticker-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0; right: 0;
-      z-index: 20;
-      background: rgba(10,8,4,0.92);
-      border-top: 1px solid rgba(245,240,232,0.08);
-      padding: 10px 0;
-      overflow: hidden;
-    }
-    .ticker-track {
-      display: flex;
-      gap: 0;
-      animation: tickerScroll 35s linear infinite;
-      white-space: nowrap;
-    }
-    .ticker-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 40px;
-      font-size: 0.72rem;
-      color: rgba(245,240,232,0.5);
-      letter-spacing: 0.04em;
-    }
-    .ticker-item .dot {
-      width: 5px; height: 5px;
-      background: var(--terra);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .ticker-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 20; background: rgba(10,8,4,0.92); border-top: 1px solid rgba(245,240,232,0.08); padding: 10px 0; overflow: hidden; }
+    .ticker-track { display: flex; white-space: nowrap; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 6px; padding: 0 40px; font-size: 0.72rem; color: rgba(245,240,232,0.5); letter-spacing: 0.04em; flex-shrink: 0; }
+    .ticker-item .dot { width: 5px; height: 5px; background: var(--terra); border-radius: 50%; flex-shrink: 0; }
     .ticker-item .amount { color: var(--amber); font-weight: 500; }
     .ticker-item .name { color: rgba(245,240,232,0.75); }
-    @keyframes tickerScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* Slide indicator dots */
-    .slide-dots {
-      position: fixed;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .dot-ind {
-      width: 4px; height: 4px;
-      border-radius: 50%;
-      background: rgba(245,240,232,0.25);
-      transition: all 0.3s;
-      cursor: none;
-    }
-    .dot-ind.active {
-      background: var(--amber);
-      height: 24px;
-      border-radius: 2px;
-    }
-
-    /* Nav top */
-    .top-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 20;
-      padding: 20px 36px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--warm-white);
-      text-decoration: none;
-    }
-    .nav-logo span { color: var(--amber); }
-    .nav-right {
-      font-size: 0.68rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(245,240,232,0.4);
-    }
-
-    /* Animations */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      .mv-grid { grid-template-columns: 1fr; gap: 12px; }
-      .top-nav { padding: 16px 20px; }
-      .slide-dots { display: none; }
-      .headline { font-size: clamp(2.8rem, 14vw, 5rem); }
-    }
+    .ticker-item.live .dot { background: #4CAF50; animation: pulseDot 1.5s ease-in-out infinite; }
+    .live-badge { color: #4CAF50; font-size: 0.58rem; margin-left: 4px; letter-spacing: 0.1em; }
+    @keyframes pulseDot { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes tickerScroll { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+    @media (max-width:600px) { .mv-grid { grid-template-columns:1fr; } .slide-dots { display:none; } .top-nav { padding:16px 20px; } }
   </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- Slideshow -->
-<div class="slideshow" id="slideshow">
+<div class="slideshow">
   <div class="slide active"></div>
   <div class="slide"></div>
   <div class="slide"></div>
   <div class="slide"></div>
   <div class="slide"></div>
 </div>
-
-<!-- Overlays -->
 <div class="overlay"></div>
 <div class="grain"></div>
 
-<!-- Top Nav -->
 <nav class="top-nav">
   <a class="nav-logo" href="#">One <span>Bob</span> Hope</a>
   <div class="nav-right">Est. 2025 · East Africa</div>
 </nav>
 
-<!-- Slide dots -->
 <div class="slide-dots" id="slideDots">
   <div class="dot-ind active"></div>
   <div class="dot-ind"></div>
@@ -450,45 +99,26 @@
   <div class="dot-ind"></div>
 </div>
 
-<!-- Main Content -->
 <div class="content">
-
-  <!-- Logo mark -->
   <div class="logo-mark">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#E8A020" stroke-width="1.5">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+    <svg viewBox="0 0 24 24" fill="none" stroke="#E8A020" stroke-width="1.5" width="24" height="24">
+      <circle cx="12" cy="12" r="10"/>
       <path d="M12 6v6l4 2"/>
     </svg>
   </div>
-
-  <!-- Eyebrow -->
   <div class="eyebrow">East Africa · 6 Nations · One Purpose</div>
-
-  <!-- Headline -->
   <h1 class="headline">
     <em>One Bob</em>
     <span class="line2">Hope Charity</span>
   </h1>
-
-  <!-- Tagline -->
   <p class="tagline">
     <span>"Bob"</span> is what we all call the smallest coin in our pocket —<br/>
     no matter which country you're from in East Africa.<br/>
     <em>One bob from a million hearts changes everything.</em>
   </p>
-
-  <!-- Name story -->
   <div class="name-story">
-    <p>
-      <strong>Why "One Bob"?</strong> — We never ask how much you can give.
-      We only ask that you give what you can. One bob from you.
-      One bob from your neighbour. One bob from a stranger three countries away.
-      Together, a million bobs build schools, feed children, and restore futures
-      that poverty tried to steal.
-    </p>
+    <p><strong>Why "One Bob"?</strong> — We never ask how much you can give. We only ask that you give what you can. One bob from you. One bob from your neighbour. One bob from a stranger three countries away. Together, a million bobs build schools, feed children, and restore futures that poverty tried to steal.</p>
   </div>
-
-  <!-- Mission & Vision -->
   <div class="mv-grid">
     <div class="mv-card">
       <div class="mv-label">Our Mission</div>
@@ -499,102 +129,149 @@
       <div class="mv-text">A generation of East African children who grow up with full stomachs, warm shelter, quality education, and the freedom to dream.</div>
     </div>
   </div>
-
-  <!-- CTA -->
   <div class="cta-wrap">
-    <a href="home.html" class="btn-cta">
-      See Their Faces
-      <span class="arrow">→</span>
-    </a>
+    <a href="home.html" class="btn-cta">See Their Faces <span class="arrow">→</span></a>
   </div>
-
 </div>
 
-<!-- Country flags strip -->
 <div class="countries-strip">
-  <span class="country-flag" title="Kenya">🇰🇪</span>
-  <span class="country-flag" title="Tanzania">🇹🇿</span>
-  <span class="country-flag" title="Uganda">🇺🇬</span>
-  <span class="country-flag" title="Rwanda">🇷🇼</span>
-  <span class="country-flag" title="Burundi">🇧🇮</span>
-  <span class="country-flag" title="Ethiopia">🇪🇹</span>
+  <span class="country-flag">🇰🇪</span>
+  <span class="country-flag">🇹🇿</span>
+  <span class="country-flag">🇺🇬</span>
+  <span class="country-flag">🇷🇼</span>
+  <span class="country-flag">🇧🇮</span>
+  <span class="country-flag">🇪🇹</span>
 </div>
 
-<!-- Donation Ticker -->
 <div class="ticker-bar">
-  <div class="ticker-track" id="tickerTrack">
-    <span class="ticker-item"><span class="dot"></span><span class="name">Amina from Nairobi</span>&nbsp;just donated&nbsp;<span class="amount">KSh 10</span>&nbsp;· 2 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">David from Kampala</span>&nbsp;just donated&nbsp;<span class="amount">UGX 500</span>&nbsp;· 5 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Grace from Kigali</span>&nbsp;just donated&nbsp;<span class="amount">RWF 100</span>&nbsp;· 8 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Samuel from Addis</span>&nbsp;just donated&nbsp;<span class="amount">ETB 5</span>&nbsp;· 11 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Zawadi from Dar es Salaam</span>&nbsp;just donated&nbsp;<span class="amount">TSh 100</span>&nbsp;· 14 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Pierre from Bujumbura</span>&nbsp;just donated&nbsp;<span class="amount">BIF 50</span>&nbsp;· 17 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Fatuma from Mombasa</span>&nbsp;just donated&nbsp;<span class="amount">KSh 50</span>&nbsp;· 20 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Moses from Entebbe</span>&nbsp;just donated&nbsp;<span class="amount">UGX 1,000</span>&nbsp;· 23 mins ago</span>
-    <!-- Duplicate for seamless loop -->
-    <span class="ticker-item"><span class="dot"></span><span class="name">Amina from Nairobi</span>&nbsp;just donated&nbsp;<span class="amount">KSh 10</span>&nbsp;· 2 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">David from Kampala</span>&nbsp;just donated&nbsp;<span class="amount">UGX 500</span>&nbsp;· 5 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Grace from Kigali</span>&nbsp;just donated&nbsp;<span class="amount">RWF 100</span>&nbsp;· 8 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Samuel from Addis</span>&nbsp;just donated&nbsp;<span class="amount">ETB 5</span>&nbsp;· 11 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Zawadi from Dar es Salaam</span>&nbsp;just donated&nbsp;<span class="amount">TSh 100</span>&nbsp;· 14 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Pierre from Bujumbura</span>&nbsp;just donated&nbsp;<span class="amount">BIF 50</span>&nbsp;· 17 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Fatuma from Mombasa</span>&nbsp;just donated&nbsp;<span class="amount">KSh 50</span>&nbsp;· 20 mins ago</span>
-    <span class="ticker-item"><span class="dot"></span><span class="name">Moses from Entebbe</span>&nbsp;just donated&nbsp;<span class="amount">UGX 1,000</span>&nbsp;· 23 mins ago</span>
-  </div>
+  <div class="ticker-track" id="tickerTrack"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Custom cursor
+  const SUPABASE_URL = 'https://uexskvkzhzcwymzohert.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_Jp3n7i3cAG0MAcBR_a6zEg_Vp92qCjJ';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Hardcoded donations — always in the ticker
+  const HARDCODED = [
+    { name: 'Amina', location: 'Nairobi', amount: 'KSh 10', time: '2 mins ago', flag: '🇰🇪' },
+    { name: 'David', location: 'Kampala', amount: 'UGX 500', time: '5 mins ago', flag: '🇺🇬' },
+    { name: 'Grace', location: 'Kigali', amount: 'RWF 100', time: '8 mins ago', flag: '🇷🇼' },
+    { name: 'Samuel', location: 'Addis Ababa', amount: 'ETB 5', time: '11 mins ago', flag: '🇪🇹' },
+    { name: 'Zawadi', location: 'Dar es Salaam', amount: 'TSh 100', time: '14 mins ago', flag: '🇹🇿' },
+    { name: 'Pierre', location: 'Bujumbura', amount: 'BIF 50', time: '17 mins ago', flag: '🇧🇮' },
+    { name: 'Fatuma', location: 'Mombasa', amount: 'KSh 50', time: '20 mins ago', flag: '🇰🇪' },
+    { name: 'Moses', location: 'Entebbe', amount: 'UGX 1,000', time: '23 mins ago', flag: '🇺🇬' },
+    { name: 'Aisha', location: 'Nairobi', amount: 'KSh 20', time: '26 mins ago', flag: '🇰🇪' },
+    { name: 'John', location: 'Kigali', amount: 'RWF 200', time: '30 mins ago', flag: '🇷🇼' },
+    { name: 'Miriam', location: 'Addis Ababa', amount: 'ETB 10', time: '33 mins ago', flag: '🇪🇹' },
+    { name: 'Hassan', location: 'Zanzibar', amount: 'TSh 500', time: '37 mins ago', flag: '🇹🇿' },
+  ];
+
+  const FLAGS = { kenya:'🇰🇪', tanzania:'🇹🇿', uganda:'🇺🇬', rwanda:'🇷🇼', burundi:'🇧🇮', ethiopia:'🇪🇹' };
+
+  function getFlag(country) {
+    if (!country) return '🌍';
+    return FLAGS[country.toLowerCase()] || '🌍';
+  }
+
+  function timeAgo(dateStr) {
+    const diff = Math.floor((Date.now() - new Date(dateStr)) / 60000);
+    if (diff < 1) return 'just now';
+    if (diff < 60) return diff + ' min ago';
+    const h = Math.floor(diff / 60);
+    if (h < 24) return h + 'hr ago';
+    return Math.floor(h / 24) + 'd ago';
+  }
+
+  function buildTicker(liveItems) {
+    const track = document.getElementById('tickerTrack');
+
+    // Build live items
+    const liveFormatted = liveItems.map(d => ({
+      name: d.name || 'Anonymous',
+      location: d.country || 'East Africa',
+      amount: `${d.currency || ''} ${Number(d.amount).toLocaleString()}`,
+      time: timeAgo(d.created_at),
+      flag: getFlag(d.country),
+      isLive: true
+    }));
+
+    // Interleave live and hardcoded
+    let combined = [];
+    const maxLen = Math.max(liveFormatted.length, HARDCODED.length);
+    for (let i = 0; i < maxLen; i++) {
+      if (i < liveFormatted.length) combined.push(liveFormatted[i]);
+      if (i < HARDCODED.length) combined.push({ ...HARDCODED[i], isLive: false });
+    }
+
+    // Duplicate for seamless loop
+    const all = [...combined, ...combined];
+
+    track.innerHTML = all.map(d => `
+      <span class="ticker-item ${d.isLive ? 'live' : ''}">
+        <span class="dot"></span>
+        <span class="name">${d.flag} ${d.name} from ${d.location}</span>
+        &nbsp;just donated&nbsp;
+        <span class="amount">${d.amount}</span>
+        &nbsp;· ${d.time}
+        ${d.isLive ? '<span class="live-badge">● LIVE</span>' : ''}
+      </span>
+    `).join('');
+
+    // Dynamic speed
+    const totalWidth = track.scrollWidth / 2;
+    const duration = Math.max(totalWidth / 55, 30);
+    track.style.animation = `tickerScroll ${duration}s linear infinite`;
+  }
+
+  async function loadTicker() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('donations')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      buildTicker(data || []);
+    } catch (e) {
+      buildTicker([]);
+    }
+  }
+
+  loadTicker();
+  setInterval(loadTicker, 30000);
+
+  // Realtime — instantly adds new donations to ticker
+  supabaseClient
+    .channel('public:donations')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'donations' }, () => {
+      loadTicker();
+    })
+    .subscribe();
+
+  // Cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    setTimeout(() => {
-      ring.style.left = e.clientX + 'px';
-      ring.style.top = e.clientY + 'px';
-    }, 80);
+    cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+    setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 80);
   });
-  document.querySelectorAll('a, button, .country-flag').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '20px';
-      cursor.style.height = '20px';
-      ring.style.width = '52px';
-      ring.style.height = '52px';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '12px';
-      cursor.style.height = '12px';
-      ring.style.width = '36px';
-      ring.style.height = '36px';
-    });
+  document.querySelectorAll('a').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='52px'; ring.style.height='52px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
   });
 
   // Slideshow
   const slides = document.querySelectorAll('.slide');
   const dots = document.querySelectorAll('.dot-ind');
   let current = 0;
-
-  function nextSlide() {
-    slides[current].classList.remove('active');
-    dots[current].classList.remove('active');
+  setInterval(() => {
+    slides[current].classList.remove('active'); dots[current].classList.remove('active');
     current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
-    dots[current].classList.add('active');
-  }
-
-  setInterval(nextSlide, 5000);
-
-  // Dot click
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
-      slides[current].classList.remove('active');
-      dots[current].classList.remove('active');
-      current = i;
-      slides[current].classList.add('active');
-      dots[current].classList.add('active');
-    });
-  });
+    slides[current].classList.add('active'); dots[current].classList.add('active');
+  }, 5000);
 </script>
 </body>
 </html>
