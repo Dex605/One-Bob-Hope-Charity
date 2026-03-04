@@ -330,6 +330,10 @@
     <h2 class="step-heading">Send your <em>donation</em></h2>
     <p class="step-sub">Follow the steps below to complete your donation.</p>
     <div class="instruction-card" id="instructionCard"></div>
+    <div style="margin-bottom:20px;">
+      <div class="custom-label">Your name <span style="color:var(--muted);font-size:0.65rem;">(optional — leave blank to appear as Anonymous once confirmed)</span></div>
+      <input type="text" class="custom-input" id="donorNameInput" placeholder="e.g. Amina, John, or leave blank for Anonymous" maxlength="40"/>
+    </div>
     <div class="btn-row">
       <button class="btn-secondary" onclick="goBack(3)">← Back</button>
       <button class="btn-primary" onclick="confirmDonation()">✓ I Have Donated</button>
@@ -364,11 +368,12 @@
     <a href="home.html">Stories</a>
     <a href="mission.html">Mission</a>
     <a href="gallery.html">Gallery</a>
-    <a href="mailto:hello@onebobhope.org">Contact</a>
+    <a href="/cdn-cgi/l/email-protection#8ae2efe6e6e5cae5e4efe8e5e8e2e5faefa4e5f8ed">Contact</a>
   </div>
   <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
 </footer>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // DATA
   const COUNTRIES = {
@@ -564,12 +569,32 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function confirmDonation() {
+  async function confirmDonation() {
     const c = COUNTRIES[selected.country];
     const child = CHILDREN[Math.floor(Math.random() * CHILDREN.length)];
+    const donorName = document.getElementById('donorNameInput').value.trim() || 'Anonymous';
+
     document.getElementById('tyChildName').textContent = child;
     const msg = `I just donated ${c.symbol} ${Number(selected.amount).toLocaleString()} to One Bob Hope Charity to help ${child} and children like them in East Africa. One bob from a million hearts changes everything. Join me 👉 https://dex605.github.io/One-Bob-Hope-Charity/donate.html`;
     document.getElementById('shareMsg').textContent = msg;
+
+    // Save to Supabase
+    try {
+      const { createClient } = supabase;
+      const sb = createClient(
+        'https://uexskvkzhzcwymzohert.supabase.co',
+        'sb_publishable_Jp3n7i3cAG0MAcBR_a6zEg_Vp92qCjJ'
+      );
+      await sb.from('donations').insert({
+        name: donorName,
+        amount: selected.amount,
+        currency: c.symbol,
+        country: selected.country,
+        status: 'pending'
+      });
+    } catch(e) {
+      console.log('Supabase save failed:', e.message);
+    }
 
     document.getElementById('step4').classList.remove('visible');
     document.getElementById('stepTY').classList.add('visible');
@@ -589,9 +614,4 @@
   }
 
   function shareWhatsApp() {
-    const msg = encodeURIComponent(document.getElementById('shareMsg').textContent);
-    window.open('https://wa.me/?text=' + msg, '_blank');
-  }
-</script>
-</body>
-</html>
+    const msg = encod

@@ -231,6 +231,7 @@
       const { data, error } = await supabaseClient
         .from('donations')
         .select('*')
+        .eq('status', 'confirmed')
         .order('created_at', { ascending: false })
         .limit(20);
       if (error) throw error;

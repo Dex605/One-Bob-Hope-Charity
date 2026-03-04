@@ -545,41 +545,57 @@
     <a href="mission.html">Mission</a>
     <a href="gallery.html">Gallery</a>
     <a href="testimonies.html">Testimonies</a>
-    <a href="mailto:hello@onebobhope.org">Contact</a>
+    <a href="/cdn-cgi/l/email-protection#eb838e878784ab84858e89848983849b8ec584998c">Contact</a>
   </div>
   <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Mobile menu
   function toggleMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
 
   // Animated counters
-  function animateCounter(id, target, suffix='') {
+  function animateCounter(id, target) {
     const el = document.getElementById(id);
     let current = 0;
-    const step = Math.ceil(target / 60);
+    const step = Math.max(1, Math.ceil(target / 60));
     const timer = setInterval(() => {
       current = Math.min(current + step, target);
-      el.textContent = current.toLocaleString() + suffix;
+      el.textContent = current.toLocaleString();
       if (current >= target) clearInterval(timer);
     }, 30);
+  }
+
+  // Fetch live stats from Supabase
+  async function loadStats() {
+    try {
+      const sb = supabase.createClient(
+        'https://uexskvkzhzcwymzohert.supabase.co',
+        'sb_publishable_Jp3n7i3cAG0MAcBR_a6zEg_Vp92qCjJ'
+      );
+      const { data, error } = await sb.from('donations').select('*');
+      if (error) throw error;
+      const totalDonors = data.length || 0;
+      animateCounter('cnt1', 12847 + totalDonors);
+      animateCounter('cnt2', 3421 + Math.floor(totalDonors * 0.27));
+      animateCounter('cnt3', 18);
+      animateCounter('cnt4', 6);
+    } catch(e) {
+      animateCounter('cnt1', 12847);
+      animateCounter('cnt2', 3421);
+      animateCounter('cnt3', 18);
+      animateCounter('cnt4', 6);
+    }
   }
 
   // Trigger counters when visible
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        animateCounter('cnt1', 12847);
-        animateCounter('cnt2', 3421);
-        animateCounter('cnt3', 18);
-        animateCounter('cnt4', 6);
+        loadStats();
         observer.disconnect();
       }
     });
   }, { threshold: 0.3 });
   observer.observe(document.querySelector('.impact-strip'));
-</script>
-
-</body>
-</html>

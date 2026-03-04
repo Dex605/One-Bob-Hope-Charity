@@ -340,6 +340,33 @@
     </div>
   </div>
 
+  <!-- ABOUT US / TEAM -->
+  <div class="divider"></div>
+  <div class="sec-label">About Us</div>
+  <h2 class="sec-title">The people behind<br/><em>One Bob Hope</em></h2>
+  <p style="font-size:0.86rem;color:var(--muted);max-width:600px;line-height:1.85;margin-bottom:40px;">One Bob Hope Charity was founded by a small group of East Africans who grew up watching poverty take children away from classrooms, kitchens, and futures. We are not a foreign aid organisation. We are East Africans who decided to stop waiting for someone else to fix what we see every day.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;margin-bottom:60px;">
+    <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;padding:28px 20px;text-align:center;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(196,98,45,0.35)'" onmouseout="this.style.borderColor='rgba(245,240,232,0.1)'">
+      <div style="width:64px;height:64px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;margin:0 auto 14px;border:2px solid rgba(196,98,45,0.4);">F</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:4px;">Founder</div>
+      <div style="font-size:0.68rem;color:var(--amber);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Executive Director</div>
+      <div style="font-size:0.78rem;color:rgba(245,240,232,0.6);line-height:1.7;">Nairobi, Kenya 🇰🇪<br/>Building One Bob Hope from the ground up.</div>
+    </div>
+    <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;padding:28px 20px;text-align:center;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(196,98,45,0.35)'" onmouseout="this.style.borderColor='rgba(245,240,232,0.1)'">
+      <div style="width:64px;height:64px;border-radius:50%;background:#2D4A35;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;margin:0 auto 14px;border:2px solid rgba(45,74,53,0.5);">+</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:4px;">Your Name Here</div>
+      <div style="font-size:0.68rem;color:var(--amber);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">Join Our Team</div>
+      <div style="font-size:0.78rem;color:rgba(245,240,232,0.6);line-height:1.7;">We are looking for passionate East Africans to join our core team.</div>
+    </div>
+    <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;padding:28px 20px;text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:14px;">🤝</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:10px;">Want to join us?</div>
+      <div style="font-size:0.78rem;color:rgba(245,240,232,0.6);line-height:1.7;margin-bottom:14px;">We are always looking for passionate people who believe in what we do.</div>
+      <a href="contact.html" style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);text-decoration:none;">Get in touch →</a>
+    </div>
+  </div>
+
   <!-- CTA BANNER -->
   <div class="cta-banner">
     <h3>You have read our mission.<br/><em>Now be part of it.</em></h3>
@@ -357,12 +384,12 @@
     <a href="donate.html">Donate</a>
     <a href="gallery.html">Gallery</a>
     <a href="testimonies.html">Testimonies</a>
-    <a href="mailto:hello@onebobhope.org">Contact</a>
+    <a href="/cdn-cgi/l/email-protection#85ede0e9e9eac5eaebe0e7eae7edeaf5e0abeaf7e2">Contact</a>
   </div>
   <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 
   // Animate bars on scroll
@@ -375,9 +402,4 @@
         barObserver.disconnect();
       }
     });
-  }, { threshold: 0.3 });
-  const barSection = document.querySelector('.bar-item');
-  if (barSection) barObserver.observe(barSection);
-</script>
-</body>
-</html>
+  }, { thr

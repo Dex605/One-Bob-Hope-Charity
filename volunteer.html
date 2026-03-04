@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Bob Hope Charity — Volunteer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --terra: #C4622D; --amber: #E8A020; --black: #0a0a0a; --deep: #0d0b08; --warm-white: #F5F0E8; --muted: rgba(245,240,232,0.55); --glass: rgba(245,240,232,0.04); --glass-border: rgba(245,240,232,0.1); }
+    html, body { background: var(--black); color: var(--warm-white); font-family: 'Jost', sans-serif; overflow-x: hidden; }
+    .navbar { position: sticky; top: 0; z-index: 100; background: rgba(10,8,4,0.94); backdrop-filter: blur(16px); border-bottom: 1px solid var(--glass-border); padding: 0 36px; display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--warm-white); text-decoration: none; }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link { padding: 8px 18px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.55); text-decoration: none; border-radius: 3px; transition: all 0.2s; border: 1px solid transparent; }
+    .nav-link:hover { color: var(--warm-white); background: var(--glass); border-color: var(--glass-border); }
+    .nav-link.active { color: var(--warm-white); border-color: var(--glass-border); }
+    .nav-link.donate-btn { background: var(--terra); color: var(--warm-white); border-color: var(--terra); }
+    .hamburger { display: none; background: none; border: none; color: var(--warm-white); font-size: 1.4rem; cursor: pointer; }
+    .mobile-menu { display: none; flex-direction: column; gap: 4px; padding: 12px 20px 16px; background: rgba(10,8,4,0.97); border-bottom: 1px solid var(--glass-border); }
+    .mobile-menu.open { display: flex; }
+    .hero { padding: 72px 36px 56px; text-align: center; background: radial-gradient(ellipse at 50% 0%, rgba(196,98,45,0.12) 0%, transparent 65%); }
+    .hero-eyebrow { font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.05; margin-bottom: 16px; }
+    .hero-title em { font-style: italic; color: var(--terra); }
+    .hero-sub { max-width: 520px; margin: 0 auto; font-size: 0.88rem; line-height: 1.8; color: var(--muted); }
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: 56px 36px 80px; }
+    .sec-label { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--terra); margin-bottom: 12px; }
+    .sec-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 3.5vw, 2.8rem); font-weight: 300; line-height: 1.1; margin-bottom: 32px; }
+    .sec-title em { font-style: italic; color: var(--amber); }
+    .divider { height: 1px; background: var(--glass-border); margin: 56px 0; }
+    /* Roles grid */
+    .roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 56px; }
+    .role-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; padding: 28px 24px; transition: border-color 0.3s, transform 0.3s; }
+    .role-card:hover { border-color: rgba(196,98,45,0.35); transform: translateY(-3px); }
+    .role-icon { font-size: 2rem; margin-bottom: 14px; }
+    .role-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 6px; color: var(--amber); }
+    .role-location { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terra); margin-bottom: 12px; }
+    .role-desc { font-size: 0.82rem; line-height: 1.8; color: rgba(245,240,232,0.68); font-weight: 300; margin-bottom: 16px; }
+    .role-commitment { font-size: 0.7rem; color: var(--muted); padding: 6px 12px; background: rgba(245,240,232,0.04); border-radius: 20px; display: inline-block; }
+    /* Form */
+    .vol-form { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 40px 36px; max-width: 680px; margin: 0 auto; }
+    .form-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; margin-bottom: 6px; }
+    .form-title em { font-style: italic; color: var(--amber); }
+    .form-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .form-input, .form-select, .form-textarea { background: rgba(245,240,232,0.05); border: 1px solid var(--glass-border); border-radius: 6px; padding: 12px 16px; color: var(--warm-white); font-family: 'Jost', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.2s; width: 100%; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--terra); }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(245,240,232,0.25); }
+    .form-select option { background: #1a1208; }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .skill-chip { padding: 7px 14px; border: 1.5px solid var(--glass-border); border-radius: 20px; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; color: var(--muted); background: var(--glass); }
+    .skill-chip:hover { border-color: rgba(196,98,45,0.4); color: var(--warm-white); }
+    .skill-chip.selected { border-color: var(--terra); background: rgba(196,98,45,0.12); color: var(--warm-white); }
+    .btn-submit { padding: 14px 32px; background: var(--terra); color: var(--warm-white); border: none; border-radius: 4px; font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; width: 100%; margin-top: 8px; }
+    .btn-submit:hover { background: #D4703A; }
+    .success-msg { display: none; background: rgba(45,74,53,0.2); border: 1px solid rgba(107,191,122,0.3); border-radius: 6px; padding: 14px 16px; font-size: 0.82rem; color: #6BBF7A; margin-bottom: 16px; }
+    .success-msg.visible { display: block; }
+    /* Why volunteer */
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 56px; }
+    .why-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 8px; padding: 22px 18px; text-align: center; }
+    .why-icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .why-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: var(--amber); }
+    .why-desc { font-size: 0.75rem; color: rgba(245,240,232,0.6); line-height: 1.7; }
+    footer { background: var(--deep); border-top: 1px solid var(--glass-border); padding: 40px 36px 28px; text-align: center; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+    .footer-logo span { color: var(--amber); }
+    .footer-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 12px 0; }
+    .footer-links a { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--amber); }
+    .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.25); margin-top: 12px; }
+    @media (max-width: 768px) { .navbar { padding: 0 20px; } .nav-links { display: none; } .hamburger { display: block; } .page-wrap { padding: 36px 20px 60px; } .hero { padding: 52px 20px 40px; } .form-row { grid-template-columns: 1fr; } .vol-form { padding: 28px 20px; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">One <span>Bob</span> Hope</a>
+  <div class="nav-links">
+    <a href="home.html" class="nav-link">Stories</a>
+    <a href="mission.html" class="nav-link">Mission</a>
+    <a href="volunteer.html" class="nav-link active">Volunteer</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="home.html" class="nav-link">Stories</a>
+  <a href="mission.html" class="nav-link">Mission</a>
+  <a href="volunteer.html" class="nav-link active">Volunteer</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="donate.html" class="nav-link donate-btn">Donate Now</a>
+</div>
+
+<section class="hero">
+  <div class="hero-eyebrow">Give your time · Give your skills · Give hope</div>
+  <h1 class="hero-title">Volunteer with<br/><em>One Bob Hope</em></h1>
+  <p class="hero-sub">You do not need money to change a life. You can give your time, your skills, and your presence. Every volunteer hour is worth a hundred bobs to the children we serve.</p>
+</section>
+
+<div class="page-wrap">
+
+  <!-- Why volunteer -->
+  <div class="sec-label">Why Volunteer</div>
+  <h2 class="sec-title">What you <em>gain and give</em></h2>
+  <div class="why-grid">
+    <div class="why-card"><div class="why-icon">🌍</div><div class="why-title">Real Impact</div><div class="why-desc">You will see and feel the difference your time makes — not in a report, but in a child's smile.</div></div>
+    <div class="why-card"><div class="why-icon">🤝</div><div class="why-title">Community</div><div class="why-desc">Join a network of like-minded East Africans who believe in building each other up.</div></div>
+    <div class="why-card"><div class="why-icon">📚</div><div class="why-title">Skills Growth</div><div class="why-desc">Develop leadership, communication, and community development skills on the ground.</div></div>
+    <div class="why-card"><div class="why-icon">❤️</div><div class="why-title">Purpose</div><div class="why-desc">There is nothing quite like knowing that your weekend made a child's week better.</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Roles -->
+  <div class="sec-label">Open Volunteer Roles</div>
+  <h2 class="sec-title">Find your <em>place with us</em></h2>
+  <div class="roles-grid">
+    <div class="role-card">
+      <div class="role-icon">📖</div>
+      <div class="role-name">Reading Volunteer</div>
+      <div class="role-location">🇰🇪 Kenya · 🇺🇬 Uganda · 🇷🇼 Rwanda</div>
+      <div class="role-desc">Read with children at care centres and schools. Help them improve their literacy one story at a time. No experience needed — just patience and warmth.</div>
+      <span class="role-commitment">2–4 hrs/week · In person</span>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">💻</div>
+      <div class="role-name">Digital & Social Media</div>
+      <div class="role-location">🌍 Remote · All Countries</div>
+      <div class="role-desc">Help us tell our story online. Create content, manage social media, write posts, and help spread the word about One Bob Hope to new audiences.</div>
+      <span class="role-commitment">3–5 hrs/week · Remote</span>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🍽️</div>
+      <div class="role-name">Feeding Programme Helper</div>
+      <div class="role-location">🇰🇪 Nairobi · 🇹🇿 Dar es Salaam</div>
+      <div class="role-desc">Help prepare and serve meals at our partner feeding centres. Be part of the team that ensures every child eats today.</div>
+      <span class="role-commitment">Weekend mornings · In person</span>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🏗️</div>
+      <div class="role-name">Construction & Repair</div>
+      <div class="role-location">🇧🇮 Burundi · 🇪🇹 Ethiopia</div>
+      <div class="role-desc">Help build and repair classrooms, boreholes, and shelter. No professional experience required — just willingness to get your hands dirty for a good cause.</div>
+      <span class="role-commitment">One-off or regular · In person</span>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🎨</div>
+      <div class="role-name">Arts & Creative</div>
+      <div class="role-location">🌍 Remote or In Person</div>
+      <div class="role-desc">Teach drawing, music, drama, or crafts to children. Help us capture their stories through photography or video. Creativity heals and inspires.</div>
+      <span class="role-commitment">Flexible · Remote or In person</span>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🏥</div>
+      <div class="role-name">Health & Wellness</div>
+      <div class="role-location">🇷🇼 Rwanda · 🇺🇬 Uganda</div>
+      <div class="role-desc">Medical and nursing professionals who can offer health screenings, basic care, and health education at our partner centres. All qualifications welcome.</div>
+      <span class="role-commitment">Monthly visits · In person</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Form -->
+  <div class="vol-form">
+    <h2 class="form-title">Apply to <em>volunteer</em></h2>
+    <p class="form-sub">Fill in the form below and we will match you to the best role for your skills, location, and availability. We respond within 3 business days.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input type="text" class="form-input" id="volFirst" placeholder="First name"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-input" id="volLast" placeholder="Last name"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="volEmail" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone / WhatsApp</label>
+        <input type="text" class="form-input" id="volPhone" placeholder="+254..."/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Country</label>
+        <select class="form-select" id="volCountry">
+          <option value="">Select country</option>
+          <option>Kenya</option><option>Tanzania</option><option>Uganda</option>
+          <option>Rwanda</option><option>Burundi</option><option>Ethiopia</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Preferred Role</label>
+        <select class="form-select" id="volRole">
+          <option value="">Select a role</option>
+          <option>Reading Volunteer</option>
+          <option>Digital & Social Media</option>
+          <option>Feeding Programme Helper</option>
+          <option>Construction & Repair</option>
+          <option>Arts & Creative</option>
+          <option>Health & Wellness</option>
+          <option>Any Role</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your Skills <span style="color:var(--muted);font-size:0.6rem;">(select all that apply)</span></label>
+      <div class="skills-grid" id="skillsGrid">
+        <span class="skill-chip" onclick="toggleSkill(this)">Teaching</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Medical / Nursing</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Photography</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Social Media</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Construction</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Cooking</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Music / Arts</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Counselling</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Fundraising</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Translation</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Driving</span>
+        <span class="skill-chip" onclick="toggleSkill(this)">Web / Tech</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tell us about yourself</label>
+      <textarea class="form-textarea" id="volMessage" placeholder="Why do you want to volunteer with One Bob Hope? Any relevant experience?"></textarea>
+    </div>
+    <div class="success-msg" id="volSuccess">✓ Application received! We will contact you within 3 business days. Thank you for choosing to give your time. 🌍</div>
+    <button class="btn-submit" onclick="submitVolunteer()">Submit Application →</button>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">One <span>Bob</span> Hope Charity</div>
+  <div class="footer-links">
+    <a href="home.html">Stories</a><a href="donate.html">Donate</a>
+    <a href="mission.html">Mission</a><a href="gallery.html">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary</div>
+</footer>
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+  function toggleSkill(el) { el.classList.toggle('selected'); }
+  function submitVolunteer() {
+    const first = document.getElementById('volFirst').value.trim();
+    const email = document.getElementById('volEmail').value.trim();
+    if (!first || !email) { alert('Please fill in at least your name and email.'); return; }
+    document.getElementById('volSuccess').classList.add('visible');
+    document.getElementById('volFirst').value = '';
+    document.getElementById('volLast').value = '';
+    document.getElementById('volEmail').value = '';
+    document.getElementById('volPhone').value = '';
+    document.getElementById('volMessage').value = '';
+    document.querySelectorAll('.skill-chip').forEach(c => c.classList.remove('selected'));
+  }
+</script>
+</body>
+</html>

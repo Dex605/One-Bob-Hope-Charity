@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Bob Hope Charity — Page Not Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --terra: #C4622D; --amber: #E8A020; --black: #0a0a0a; --warm-white: #F5F0E8; --muted: rgba(245,240,232,0.55); --glass: rgba(245,240,232,0.04); --glass-border: rgba(245,240,232,0.1); }
+    html, body { background: var(--black); color: var(--warm-white); font-family: 'Jost', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; }
+    .big-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(7rem, 20vw, 14rem); font-weight: 700; line-height: 0.9; color: var(--terra); opacity: 0.18; margin-bottom: 24px; letter-spacing: -0.04em; }
+    .icon { font-size: 3rem; margin-bottom: 16px; }
+    .title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; margin-bottom: 14px; }
+    .title em { font-style: italic; color: var(--amber); }
+    .sub { font-size: 0.88rem; color: var(--muted); max-width: 420px; line-height: 1.8; margin-bottom: 40px; }
+    .links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .btn { padding: 12px 24px; border-radius: 4px; font-family: 'Jost', sans-serif; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+    .btn-primary { background: var(--terra); color: var(--warm-white); }
+    .btn-primary:hover { background: #D4703A; transform: translateY(-1px); }
+    .btn-secondary { background: var(--glass); border: 1px solid var(--glass-border); color: var(--muted); }
+    .btn-secondary:hover { color: var(--warm-white); border-color: rgba(245,240,232,0.3); }
+    .logo { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--warm-white); text-decoration: none; position: fixed; top: 24px; left: 36px; }
+    .logo span { color: var(--amber); }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="logo">One <span>Bob</span> Hope</a>
+  <div class="big-num">404</div>
+  <div class="icon">🌍</div>
+  <h1 class="title">This page has <em>wandered off</em></h1>
+  <p class="sub">The page you are looking for does not exist or may have been moved. But the children are still here — and they still need your one bob.</p>
+  <div class="links">
+    <a href="index.html" class="btn btn-primary">← Go Home</a>
+    <a href="home.html" class="btn btn-secondary">See Their Stories</a>
+    <a href="donate.html" class="btn btn-secondary">Donate Now</a>
+    <a href="contact.html" class="btn btn-secondary">Contact Us</a>
+  </div>
+</body>
+</html>
