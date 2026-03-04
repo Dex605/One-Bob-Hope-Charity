@@ -373,7 +373,6 @@
   <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // DATA
   const COUNTRIES = {
@@ -578,7 +577,7 @@
     const msg = `I just donated ${c.symbol} ${Number(selected.amount).toLocaleString()} to One Bob Hope Charity to help ${child} and children like them in East Africa. One bob from a million hearts changes everything. Join me 👉 https://dex605.github.io/One-Bob-Hope-Charity/donate.html`;
     document.getElementById('shareMsg').textContent = msg;
 
-    // Save to Supabase
+    // Save to Supabase as pending — you confirm before it appears on ticker
     try {
       const sb = supabase.createClient(
         'https://uexskvkzhzcwymzohert.supabase.co',
@@ -613,4 +612,9 @@
   }
 
   function shareWhatsApp() {
-    const msg = encod
+    const msg = encodeURIComponent(document.getElementById('shareMsg').textContent);
+    window.open('https://wa.me/?text=' + msg, '_blank');
+  }
+</script>
+</body>
+</html>
