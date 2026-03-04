@@ -550,7 +550,6 @@
   <div class="footer-copy">© 2025 One Bob Hope Charity · All donations are voluntary · No minimum amount</div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Mobile menu
   function toggleMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
@@ -577,14 +576,14 @@
       const { data, error } = await sb.from('donations').select('*');
       if (error) throw error;
       const totalDonors = data.length || 0;
-      animateCounter('cnt1', 12847 + totalDonors);
-      animateCounter('cnt2', 3421 + Math.floor(totalDonors * 0.27));
-      animateCounter('cnt3', 18);
+      animateCounter('cnt1', 12600 + totalDonors);
+      animateCounter('cnt2', 3491 + Math.floor(totalDonors * 0.27));
+      animateCounter('cnt3', 17);
       animateCounter('cnt4', 6);
     } catch(e) {
-      animateCounter('cnt1', 12847);
-      animateCounter('cnt2', 3421);
-      animateCounter('cnt3', 18);
+      animateCounter('cnt1', 12600);
+      animateCounter('cnt2', 3491);
+      animateCounter('cnt3', 17);
       animateCounter('cnt4', 6);
     }
   }
@@ -599,3 +598,7 @@
     });
   }, { threshold: 0.3 });
   observer.observe(document.querySelector('.impact-strip'));
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</body>
+</html>
